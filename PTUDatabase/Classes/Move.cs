@@ -1,28 +1,28 @@
-﻿namespace PTUDatabase
+﻿namespace PTUDatabase;
+
+public record Move
 {
-    public record Move
+    public string Name { get; init; } = "";
+    public PokemonType Type { get; init; }
+    public MoveClass Class { get; init; }
+    public int? DamageBase { get; init; }
+    [YamlDotNet.Serialization.YamlIgnore]
+    public (string Dice, int Minimum, int Average, int Maximum)? Damage => DamageBase is int ? DamageBaseData[System.Math.Clamp(DamageBase ?? 1, 1, 28)] : DamageBaseData[0];
+    public Frequency Frequency { get; init; } = Frequency.AtWill();
+    public int? AccuracyCheck { get; init; }
+    public string Range { get; init; } = "";
+    //public IList<MoveRange> Ranges { get; init; } = Array.Empty<MoveRange>(); // Disabled this because we really don't need it for our purposes, and would add more cleanup work.
+    public ContestType ContestType { get; init; }
+    public ContestEffect ContestEffect { get; init; } = ContestEffect.None;
+    public string Effects { get; init; } = "";
+    public bool UnofficialAlternative { get; init; } = false;
+
+    public override string ToString() => Name;
+
+    public static readonly Move None = new() { Name = "None" };
+
+    public static readonly (string Dice, int Minimum, int Average, int Maximum)[] DamageBaseData = new[]
     {
-        public string Name { get; init; } = "";
-        public PokemonType Type { get; init; }
-        public MoveClass Class { get; init; }
-        public int? DamageBase { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public (string Dice, int Minimum, int Average, int Maximum)? Damage => DamageBase is int ? DamageBaseData[System.Math.Clamp(DamageBase ?? 1, 1, 28)] : DamageBaseData[0];
-        public Frequency Frequency { get; init; } = Frequency.AtWill();
-        public int? AccuracyCheck { get; init; }
-        public string Range { get; init; } = "";
-        //public IList<MoveRange> Ranges { get; init; } = Array.Empty<MoveRange>(); // Disabled this because we really don't need it for our purposes, and would add more cleanup work.
-        public ContestType ContestType { get; init; }
-        public ContestEffect ContestEffect { get; init; } = ContestEffect.None;
-        public string Effects { get; init; } = "";
-        public bool UnofficialAlternative { get; init; } = false;
-
-        public override string ToString() => Name;
-
-        public static readonly Move None = new() { Name = "None" };
-
-        public static readonly (string Dice, int Minimum, int Average, int Maximum)[] DamageBaseData = new[]
-        {
             (    "--"  ,   0,   0,   0), // Invalid
             ( "1d6 + 1",   2,   5,   7), // 1
             ( "1d6 + 3",   4,   7,   9),
@@ -53,6 +53,5 @@
             ("8d12 + 70", 78, 120, 166),
             ("8d12 + 80", 88, 130, 176), // 28
         };
-    }
 }
 

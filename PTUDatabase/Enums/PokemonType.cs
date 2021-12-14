@@ -1,25 +1,24 @@
-﻿namespace PTUDatabase
+﻿namespace PTUDatabase;
+
+public enum PokemonType
 {
-    public enum PokemonType
-    {
-        Unknown,
-        Bug,
-        Dark,
-        Dragon,
-        Electric,
-        Fairy,
-        Fighting,
-        Fire,
-        Flying,
-        Ghost,
-        Grass,
-        Ground,
-        Ice,
-        Normal,
-        Poison,
-        Psychic,
-        Rock,
-        Steel,
-        Water,
-    }
+    Unknown,
+    Bug,
+    Dark,
+    Dragon,
+    Electric,
+    Fairy,
+    Fighting,
+    Fire,
+    Flying,
+    Ghost,
+    Grass,
+    Ground,
+    Ice,
+    Normal,
+    Poison,
+    Psychic,
+    Rock,
+    Steel,
+    Water,
 }

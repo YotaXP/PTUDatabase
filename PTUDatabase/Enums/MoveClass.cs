@@ -1,10 +1,9 @@
-﻿namespace PTUDatabase
+﻿namespace PTUDatabase;
+
+public enum MoveClass
 {
-    public enum MoveClass
-    {
-        Status,
-        Physical,
-        Special,
-        Static,
-    }
+    Status,
+    Physical,
+    Special,
+    Static,
 }

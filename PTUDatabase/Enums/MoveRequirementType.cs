@@ -1,10 +1,9 @@
-﻿namespace PTUDatabase
+﻿namespace PTUDatabase;
+
+public enum MoveRequirementType
 {
-    public enum MoveRequirementType
-    {
-        Egg,
-        Level,
-        Tutor,
-        Machine,
-    }
+    Egg,
+    Level,
+    Tutor,
+    Machine,
 }

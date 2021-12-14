@@ -1,9 +1,8 @@
-﻿namespace PTUDatabase
+﻿namespace PTUDatabase;
+
+public enum AbilityRequirementType
 {
-    public enum AbilityRequirementType
-    {
-        Basic,
-        Advanced,
-        High,
-    }
+    Basic,
+    Advanced,
+    High,
 }

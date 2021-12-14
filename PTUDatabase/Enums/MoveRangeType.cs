@@ -1,22 +1,21 @@
 ﻿using System.ComponentModel;
 
-namespace PTUDatabase
+namespace PTUDatabase;
+
+public enum MoveRangeType
 {
-    public enum MoveRangeType
-    {
-        Unknown,
-        Self,
-        Melee,
-        CardinallyAdjacentTargets,
-        Any,
-        [Description("WR")]
-        WeaponRange,
-        Burst,
-        Ranged,
-        Line,
-        Cone,
-        Blast, // Close and Ranged
-        Field,
-        Blessing,
-    }
+    Unknown,
+    Self,
+    Melee,
+    CardinallyAdjacentTargets,
+    Any,
+    [Description("WR")]
+    WeaponRange,
+    Burst,
+    Ranged,
+    Line,
+    Cone,
+    Blast, // Close and Ranged
+    Field,
+    Blessing,
 }

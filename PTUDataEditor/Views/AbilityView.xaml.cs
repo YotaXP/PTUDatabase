@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PTUDataEditor.Views
+namespace PTUDataEditor.Views;
+
+/// <summary>
+/// Interaction logic for AbilityView.xaml
+/// </summary>
+public partial class AbilityView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for AbilityView.xaml
-    /// </summary>
-    public partial class AbilityView : UserControl
+    public AbilityView()
     {
-        public AbilityView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

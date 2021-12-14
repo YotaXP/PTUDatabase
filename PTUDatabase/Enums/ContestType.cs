@@ -1,12 +1,11 @@
-﻿namespace PTUDatabase
+﻿namespace PTUDatabase;
+
+public enum ContestType
 {
-    public enum ContestType
-    {
-        None,
-        Cool,
-        Tough,
-        Smart,
-        Cute,
-        Beauty,
-    }
+    None,
+    Cool,
+    Tough,
+    Smart,
+    Cute,
+    Beauty,
 }

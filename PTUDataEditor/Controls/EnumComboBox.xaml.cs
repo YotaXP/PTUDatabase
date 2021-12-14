@@ -14,33 +14,32 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PTUDataEditor.Controls
-{
-    /// <summary>
-    /// Interaction logic for EnumComboBox.xaml
-    /// </summary>
-    public partial class EnumComboBox : ComboBox, INotifyPropertyChanged
-    {
-        public EnumComboBox()
-        {
-            InitializeComponent();
-        }
+namespace PTUDataEditor.Controls;
 
-        private Type _enumType = typeof(Type);
-        public Type EnumType
+/// <summary>
+/// Interaction logic for EnumComboBox.xaml
+/// </summary>
+public partial class EnumComboBox : ComboBox, INotifyPropertyChanged
+{
+    public EnumComboBox()
+    {
+        InitializeComponent();
+    }
+
+    private Type _enumType = typeof(Type);
+    public Type EnumType
+    {
+        get => _enumType;
+        set
         {
-            get => _enumType;
-            set
+            if (value != _enumType)
             {
-                if (value != _enumType)
-                {
-                    _enumType = value;
-                    ItemsSource = Enum.GetValues(EnumType); // TODO: Show actual names.
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnumType)));
-                }
+                _enumType = value;
+                ItemsSource = Enum.GetValues(EnumType); // TODO: Show actual names.
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EnumType)));
             }
         }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 }

@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PTUDataEditor.Views
+namespace PTUDataEditor.Views;
+
+/// <summary>
+/// Interaction logic for ContestEffectView.xaml
+/// </summary>
+public partial class ContestEffectView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for ContestEffectView.xaml
-    /// </summary>
-    public partial class ContestEffectView : UserControl
+    public ContestEffectView()
     {
-        public ContestEffectView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

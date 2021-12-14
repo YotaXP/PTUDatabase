@@ -1,12 +1,11 @@
-﻿namespace PTUDatabase
+﻿namespace PTUDatabase;
+
+public enum SizeClass
 {
-    public enum SizeClass
-    {
-        Small,
-        Medium,
-        Large,
-        Huge,
-        Gigantic,
-    }
+    Small,
+    Medium,
+    Large,
+    Huge,
+    Gigantic,
 }
 

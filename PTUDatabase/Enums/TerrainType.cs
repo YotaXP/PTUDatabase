@@ -1,16 +1,15 @@
-﻿namespace PTUDatabase
+﻿namespace PTUDatabase;
+
+public enum TerrainType
 {
-    public enum TerrainType
-    {
-        Grassland,
-        Forest,
-        Ocean,
-        Wetlands,
-        Desert,
-        Tundra,
-        Mountain,
-        Cave,
-        Urban,
-    }
+    Grassland,
+    Forest,
+    Ocean,
+    Wetlands,
+    Desert,
+    Tundra,
+    Mountain,
+    Cave,
+    Urban,
 }
 

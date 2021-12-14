@@ -1,9 +1,8 @@
-﻿namespace PTUDatabase
+﻿namespace PTUDatabase;
+
+public enum Rarity
 {
-    public enum Rarity
-    {
-        Common,
-        Mythical,
-        Legendary,
-    }
+    Common,
+    Mythical,
+    Legendary,
 }
