@@ -1,4 +1,2 @@
-﻿using System;
-
-namespace PTUDatabase;
+﻿namespace PTUDatabase;
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PTUDatabase;
+﻿namespace PTUDatabase;
 
 public record Stats
 {

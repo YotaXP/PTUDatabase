@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PTUDatabase;
+﻿namespace PTUDatabase;
 
 public record Nature
 {

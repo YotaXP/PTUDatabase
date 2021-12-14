@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-
-namespace PTUDatabase;
+﻿namespace PTUDatabase;
 
 public record Species
 {
