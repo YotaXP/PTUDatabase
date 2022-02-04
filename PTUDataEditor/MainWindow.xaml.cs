@@ -40,7 +40,7 @@ public partial class MainWindow : Window
         }
 
         var dbvm = DatabaseView.DataContext as DatabaseViewModel;
-        if (dbvm is { })
+        if (dbvm is not null)
             dbvm.Model.Save(OpenPath, gzip: OpenPath.EndsWith(".gz"));
     }
 
@@ -57,7 +57,7 @@ public partial class MainWindow : Window
         {
             using var file = dialog.OpenFile();
             var dbvm = DatabaseView.DataContext as DatabaseViewModel;
-            if (dbvm is { })
+            if (dbvm is not null)
             {
                 dbvm.Model.Save(file, gzip: dialog.FileName!.EndsWith(".gz"));
                 OpenPath = dialog.FileName;

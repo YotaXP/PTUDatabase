@@ -30,11 +30,11 @@ public class MoveViewModel : ViewModelBase
             Type = value.Type;
             Class = value.Class;
             DamageBase = value.DamageBase ?? 1;
-            HasDamageBase = value.DamageBase is { };
+            HasDamageBase = value.DamageBase is not null;
             FrequencyType = value.Frequency.Type;
             FrequencyCount = value.Frequency.Count ?? 1;
             AccuracyCheck = value.AccuracyCheck ?? 0;
-            HasAccuracyCheck = value.AccuracyCheck is { };
+            HasAccuracyCheck = value.AccuracyCheck is not null;
             Range = value.Range;
             ContestType = value.ContestType;
             ContestEffect = value.ContestEffect;

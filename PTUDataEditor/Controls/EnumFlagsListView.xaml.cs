@@ -34,7 +34,7 @@ public partial class EnumFlagsListView : ListView, INotifyPropertyChanged
     {
         var getActualName = typeof(PTUDatabase.Utilities).GetMethod("GetActualName")!.MakeGenericMethod(enumType);
 
-        if (listItems is { })
+        if (listItems is not null)
             foreach (var item in listItems)
                 item.SelectedChanged -= Item_SelectedChanged;
 
@@ -91,7 +91,7 @@ public partial class EnumFlagsListView : ListView, INotifyPropertyChanged
     private static void ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var listView = d as EnumFlagsListView;
-        Debug.Assert(listView is { });
+        Debug.Assert(listView is not null);
         listView.suppressUpdate = true;
         try
         {
