@@ -9,13 +9,13 @@ public class ContestEffectViewModel : ViewModelBase
         get => new()
         {
             Name = Name,
-            Dice = Dice,
+            Dice = Dice == 0 ? null : Dice,
             Effect = Effect,
         };
         private set
         {
             Name = value.Name;
-            SetProperty(ref _Dice, value.Dice, nameof(Dice), nameof(DiceString), nameof(UsesVariableDice));
+            SetProperty(ref _Dice, value.Dice ?? 0, nameof(Dice), nameof(DiceString), nameof(UsesVariableDice));
             Effect = value.Effect;
         }
     }
@@ -32,23 +32,23 @@ public class ContestEffectViewModel : ViewModelBase
         set => SetProperty(ref _Name, value, nameof(Name));
     }
 
-    private int? _Dice = null;
+    private int _Dice = 0;
     public int Dice
     {
-        get => _Dice ?? 0;
+        get => _Dice;
         set => SetProperty(ref _Dice, value, nameof(Dice), nameof(DiceString), nameof(UsesVariableDice));
     }
 
-    public string DiceString => $"{_Dice?.ToString() ?? "X"}d6";
+    public string DiceString => _Dice == 0 ? "Xd6" : $"{_Dice}d6";
 
     public bool UsesVariableDice
     {
-        get => !_Dice.HasValue;
+        get => _Dice == 0;
         set
         {
-            if (value && _Dice.HasValue)
-                SetProperty(ref _Dice, null, nameof(Dice), nameof(DiceString), nameof(UsesVariableDice));
-            else if (!value && !_Dice.HasValue)
+            if (value && _Dice != 0)
+                SetProperty(ref _Dice, 0, nameof(Dice), nameof(DiceString), nameof(UsesVariableDice));
+            else if (!value && _Dice == 0)
                 SetProperty(ref _Dice, 1, nameof(Dice), nameof(DiceString), nameof(UsesVariableDice));
         }
     }

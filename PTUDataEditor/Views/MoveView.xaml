@@ -6,11 +6,11 @@
              xmlns:local="clr-namespace:PTUDataEditor.Views"
              xmlns:tk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:c="clr-namespace:PTUDataEditor.Controls"
-             xmlns:ptu="clr-namespace:PTUDatabase;assembly=PTUDatabase"
+             xmlns:ptu="clr-namespace:PTUDatabase;assembly=PTUDatabase" xmlns:tc="clr-namespace:PTUDataEditor.TypeConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <tc:BoolConverter True="{x:Static Visibility.Visible}" False="{x:Static Visibility.Hidden}" x:Key="BoolToVis" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -42,9 +42,12 @@
         <c:EnumComboBox Text="{Binding ContestType, Mode=TwoWay}" EnumType="{x:Type ptu:ContestType}" Grid.Row="3" Grid.Column="1" Margin="3" />
 
         <Label Content="Contest Effect:" Grid.Row="4" />
-        <TextBlock VerticalAlignment="Center" Text="*Not Implemented*" Grid.Row="4" Grid.Column="1" Margin="3" />
-
-        <!-- CType, CEffect -->
+        <DockPanel Grid.Row="4" Grid.Column="1">
+            <CheckBox IsChecked="{Binding HasContestEffect, Mode=TwoWay}" VerticalAlignment="Center" Margin="3" DockPanel.Dock="Left" />
+            <Grid Visibility="{Binding HasContestEffect, Converter={StaticResource BoolToVis}}">
+                <ComboBox SelectedItem="{Binding MoveContestEffect, Mode=TwoWay}" ItemsSource="{Binding RootDB.ContestEffects}" DisplayMemberPath="Name" Margin="3" />
+            </Grid>
+        </DockPanel>
         
        <Label Content="Accuracy Check:" Grid.Column="2"  />
         <StackPanel Orientation="Horizontal" Grid.Column="3">

@@ -9,15 +9,15 @@ public class DatabaseViewModel : ViewModelBase
     {
         get => new()
         {
-            Moves = Moves.Select(vm => vm.Model).ToList(),
-            Abilities = Abilities.Select(vm => vm.Model).ToList(),
             ContestEffects = ContestEffects.Select(vm => vm.Model).ToList(),
+            Abilities = Abilities.Select(vm => vm.Model).ToList(),
+            Moves = Moves.Select(vm => vm.Model).ToList(),
         };
         private set
         {
-            Moves = new ObservableCollection<MoveViewModel>(value.Moves.Select(m => new MoveViewModel(m)));
-            Abilities = new ObservableCollection<AbilityViewModel>(value.Abilities.Select(a => new AbilityViewModel(a)));
             ContestEffects = new ObservableCollection<ContestEffectViewModel>(value.ContestEffects.Select(ce => new ContestEffectViewModel(ce)));
+            Abilities = new ObservableCollection<AbilityViewModel>(value.Abilities.Select(a => new AbilityViewModel(a)));
+            Moves = new ObservableCollection<MoveViewModel>(value.Moves.Select(m => new MoveViewModel(m, this)));
         }
     }
 
@@ -25,9 +25,9 @@ public class DatabaseViewModel : ViewModelBase
     {
         //Model = model;
         // Code inlined below to avoid nagging about null values
-        Moves = new ObservableCollection<MoveViewModel>(model.Moves.Select(m => new MoveViewModel(m)));
-        Abilities = new ObservableCollection<AbilityViewModel>(model.Abilities.Select(a => new AbilityViewModel(a)));
         ContestEffects = new ObservableCollection<ContestEffectViewModel>(model.ContestEffects.Select(ce => new ContestEffectViewModel(ce)));
+        Abilities = new ObservableCollection<AbilityViewModel>(model.Abilities.Select(a => new AbilityViewModel(a)));
+        Moves = new ObservableCollection<MoveViewModel>(model.Moves.Select(m => new MoveViewModel(m, this)));
     }
 
 

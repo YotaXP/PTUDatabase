@@ -20,7 +20,7 @@ public partial class DatabaseView : UserControl
     }
 
 #pragma warning disable CA1822, IDE0051 // Mark members as static, Remove unused private members
-    private object NewMove() => new MoveViewModel(new PTUDatabase.Move() { Name = "*New Move" });
+    private object NewMove() => new MoveViewModel(new PTUDatabase.Move() { Name = "*New Move" }, (DatabaseViewModel)DataContext);
     private object NewAbility() => new AbilityViewModel(new PTUDatabase.Ability() { Name = "*New Ability" });
     private object NewContestEffect() => new ContestEffectViewModel(new PTUDatabase.ContestEffect() { Name = "*New Contest Effect" });
 #pragma warning restore CA1822, IDE0051 // Mark members as static, Remove unused private members

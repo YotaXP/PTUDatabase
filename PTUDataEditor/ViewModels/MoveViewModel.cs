@@ -20,7 +20,7 @@ public class MoveViewModel : ViewModelBase
             AccuracyCheck = HasAccuracyCheck ? AccuracyCheck : null,
             Range = Range,
             ContestType = ContestType,
-            ContestEffect = ContestEffect ?? ContestEffect.None,
+            ContestEffect = (HasContestEffect ? MoveContestEffect?.Model : null) ?? ContestEffect.None,
             Effects = Effects,
             UnofficialAlternative = UnofficialAlternative,
         };
@@ -37,18 +37,21 @@ public class MoveViewModel : ViewModelBase
             HasAccuracyCheck = value.AccuracyCheck is not null;
             Range = value.Range;
             ContestType = value.ContestType;
-            ContestEffect = value.ContestEffect;
+            HasContestEffect = value.ContestEffect != ContestEffect.None;
+            MoveContestEffect = RootDB.ContestEffects.FirstOrDefault(cevm => cevm.Model == value.ContestEffect);
             Effects = value.Effects;
             UnofficialAlternative = value.UnofficialAlternative;
         }
     }
 
 
-    public MoveViewModel(Move model)
+    public MoveViewModel(Move model, DatabaseViewModel db)
     {
+        RootDB = db;
         Model = model;
     }
 
+    public DatabaseViewModel RootDB { get; set; }
 
     private string _Name = "Unnamed";
     public string Name
@@ -135,11 +138,18 @@ public class MoveViewModel : ViewModelBase
         set => SetProperty(ref _ContestType, value, nameof(ContestType));
     }
 
-    private ContestEffect? _ContestEffect = null;
-    public ContestEffect? ContestEffect
+    private bool _HasContestEffect = false;
+    public bool HasContestEffect
     {
-        get => _ContestEffect;
-        set => SetProperty(ref _ContestEffect, value, nameof(ContestEffect));
+        get => _HasContestEffect;
+        set => SetProperty(ref _HasContestEffect, value, nameof(HasContestEffect));
+    }
+
+    private ContestEffectViewModel? _MoveContestEffect = null;
+    public ContestEffectViewModel? MoveContestEffect
+    {
+        get => _MoveContestEffect;
+        set => SetProperty(ref _MoveContestEffect, value, nameof(ContestEffect));
     }
 
     private string _Effects = "";
