@@ -2,7 +2,6 @@
 
 public record Form
 {
-    public Species Species { get; init; } = new Species();
     public string Name { get; init; } = "";
     public string? ImageUrl { get; init; }
     public Stats BaseStats { get; init; } = Stats.Zero;
