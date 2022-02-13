@@ -9,9 +9,6 @@
              xmlns:ptu="clr-namespace:PTUDatabase;assembly=PTUDatabase"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
-    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -41,7 +38,7 @@
             <c:EnumComboBox SelectedItem="{Binding FrequencyType, Mode=TwoWay}" EnumType="{x:Type ptu:FrequencyType}" MinWidth="70" Margin="3" />
             <StackPanel Orientation="Horizontal" Visibility="{Binding FrequencyCountVisible, Converter={StaticResource BoolToVis}}">
                 <TextBlock VerticalAlignment="Center">×</TextBlock>
-                <tk:IntegerUpDown Value="{Binding FrequencyCount, Mode=TwoWay}" Minimum="1" MinWidth="50" Margin="3" />
+                <tk:IntegerUpDown Value="{Binding FrequencyCount, Mode=TwoWay}" Minimum="1" MinWidth="55" Margin="3" />
             </StackPanel>
         </StackPanel>
 

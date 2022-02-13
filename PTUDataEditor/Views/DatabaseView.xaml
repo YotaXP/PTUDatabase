@@ -13,13 +13,38 @@
              d:DataContext="{x:Static vm:DatabaseViewModel.DesignData}">
     <UserControl.Resources>
         <DataTemplate x:Key="BasicNameItemTemplate">
-            <TextBlock Text="{Binding Name, Mode=TwoWay}" />
+            <TextBlock Text="{Binding Name}" />
+        </DataTemplate>
+        <DataTemplate x:Key="SpeciesNameItemTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Width="30" TextAlignment="Right" FontFamily="Consolas" VerticalAlignment="Bottom">
+                    <TextBlock.Style>
+                        <Style>
+                            <Setter Property="TextBlock.Text" Value="{Binding NationalDexNumber}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding NationalDexNumber}" Value="0">
+                                    <Setter Property="TextBlock.Text" Value="?" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Margin="3 0">-</TextBlock>
+                <TextBlock Text="{Binding Name}" />
+            </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <TabControl>
             <TabItem Header="Pokémon">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">*Not Implemented*</TextBlock>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <c:EditableListBox x:Name="SpeciesListBox" SelectedIndex="1" ItemsSource="{Binding Species}" SelectedItem="{Binding SelectedSpecies, Mode=TwoWay}" ItemTemplate="{StaticResource SpeciesNameItemTemplate}" Margin="3" NewItem="NewSpecies" />
+                    <local:SpeciesView IsEnabled="{Binding SelectedItems.Count, ElementName=SpeciesListBox}" Grid.Column="1" DataContext="{Binding SelectedSpecies, Mode=OneWay}" />
+                </Grid>
             </TabItem>
             <TabItem Header="Moves">
                 <Grid>

@@ -6,12 +6,10 @@
              xmlns:local="clr-namespace:PTUDataEditor.Views"
              xmlns:tk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:c="clr-namespace:PTUDataEditor.Controls"
-             xmlns:ptu="clr-namespace:PTUDatabase;assembly=PTUDatabase" xmlns:tc="clr-namespace:PTUDataEditor.TypeConverters"
+             xmlns:ptu="clr-namespace:PTUDatabase;assembly=PTUDatabase"
+             xmlns:tc="clr-namespace:PTUDataEditor.TypeConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <tc:BoolConverter True="{x:Static Visibility.Visible}" False="{x:Static Visibility.Hidden}" x:Key="BoolToVis" />
-    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -53,7 +51,7 @@
         <StackPanel Orientation="Horizontal" Grid.Column="3">
             <CheckBox IsChecked="{Binding HasAccuracyCheck, Mode=TwoWay}" VerticalAlignment="Center" Margin="3" />
             <StackPanel Orientation="Horizontal" Visibility="{Binding HasAccuracyCheck, Converter={StaticResource BoolToVis}}">
-                <tk:IntegerUpDown Value="{Binding AccuracyCheck, Mode=TwoWay}" MinWidth="50" Margin="3" />
+                <tk:IntegerUpDown Value="{Binding AccuracyCheck, Mode=TwoWay}" MinWidth="55" Margin="3" />
             </StackPanel>
         </StackPanel>
 
@@ -61,7 +59,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3">
             <CheckBox IsChecked="{Binding HasDamageBase, Mode=TwoWay}" VerticalAlignment="Center" Margin="3" />
             <StackPanel Orientation="Horizontal" Visibility="{Binding HasDamageBase, Converter={StaticResource BoolToVis}}">
-                <tk:IntegerUpDown Value="{Binding DamageBase, Mode=TwoWay}" Minimum="1" Maximum="28" MinWidth="50" Margin="3" />
+                <tk:IntegerUpDown Value="{Binding DamageBase, Mode=TwoWay}" Minimum="1" Maximum="28" MinWidth="55" Margin="3" />
                 <TextBlock Text="{Binding DamageRoll}" VerticalAlignment="Center" />
             </StackPanel>
         </StackPanel>
@@ -71,7 +69,7 @@
             <c:EnumComboBox SelectedItem="{Binding FrequencyType, Mode=TwoWay}" EnumType="{x:Type ptu:FrequencyType}" MinWidth="70" Margin="3" />
             <StackPanel Orientation="Horizontal" Visibility="{Binding FrequencyCountVisible, Converter={StaticResource BoolToVis}}">
                 <TextBlock Text="x" VerticalAlignment="Center" />
-                <tk:IntegerUpDown Value="{Binding FrequencyCount, Mode=TwoWay}" Minimum="1" MinWidth="50" Margin="3" />
+                <tk:IntegerUpDown Value="{Binding FrequencyCount, Mode=TwoWay}" Minimum="1" MinWidth="55" Margin="3" />
             </StackPanel>
         </StackPanel>
 

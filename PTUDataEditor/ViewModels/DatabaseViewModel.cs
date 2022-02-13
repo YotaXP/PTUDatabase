@@ -12,12 +12,14 @@ public class DatabaseViewModel : ViewModelBase
             ContestEffects = ContestEffects.Select(vm => vm.Model).ToList(),
             Abilities = Abilities.Select(vm => vm.Model).ToList(),
             Moves = Moves.Select(vm => vm.Model).ToList(),
+            Species = Species.Select(vm => vm.Model).ToList(),
         };
         private set
         {
             ContestEffects = new ObservableCollection<ContestEffectViewModel>(value.ContestEffects.Select(ce => new ContestEffectViewModel(ce)));
             Abilities = new ObservableCollection<AbilityViewModel>(value.Abilities.Select(a => new AbilityViewModel(a)));
             Moves = new ObservableCollection<MoveViewModel>(value.Moves.Select(m => new MoveViewModel(m, this)));
+            Species = new ObservableCollection<SpeciesViewModel>(value.Species.Select(s => new SpeciesViewModel(s)));
         }
     }
 
@@ -28,6 +30,17 @@ public class DatabaseViewModel : ViewModelBase
         ContestEffects = new ObservableCollection<ContestEffectViewModel>(model.ContestEffects.Select(ce => new ContestEffectViewModel(ce)));
         Abilities = new ObservableCollection<AbilityViewModel>(model.Abilities.Select(a => new AbilityViewModel(a)));
         Moves = new ObservableCollection<MoveViewModel>(model.Moves.Select(m => new MoveViewModel(m, this)));
+        Species = new ObservableCollection<SpeciesViewModel>(model.Species.Select(s => new SpeciesViewModel(s)));
+    }
+
+
+    public ObservableCollection<SpeciesViewModel> Species { get; private set; }
+
+    private SpeciesViewModel? _SelectedSpecies = null;
+    public SpeciesViewModel? SelectedSpecies
+    {
+        get => _SelectedSpecies;
+        set => SetProperty(ref _SelectedSpecies, value, nameof(SelectedSpecies));
     }
 
 
