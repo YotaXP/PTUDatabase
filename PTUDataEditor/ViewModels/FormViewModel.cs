@@ -48,6 +48,35 @@ public class FormViewModel : ViewModelBase
         Model = model;
     }
 
+    public IReadOnlyList<string> ValidationIssues { get; private set; } = Array.Empty<string>();
+    public bool HasValidationIssues => ValidationIssues.Count > 0;
+
+    private List<string> Validate()
+    {
+        var issues = new List<string>();
+        if (string.IsNullOrEmpty(Name)) issues.Add("Missing form name.");
+        if (SelectionWeight < 0) issues.Add("Selection weight must be >= 0.");
+        if (Types.Count == 0) issues.Add("Missing types.");
+        if (EggGroups.Count == 0) issues.Add("Missing egg groups.");
+        if (AverageWeightKilograms == 0) issues.Add("Missing weight.");
+        if (AverageSizeMeters == 0) issues.Add("Missing size.");
+        if (string.IsNullOrEmpty(ImageUrl)) issues.Add("Missing image.");
+        if (BaseStats == Stats.Zero) issues.Add("Missing base stats.");
+        if (BaseSkills == Skills.Zero) issues.Add("Missing base skills.");
+        if (BaseSkills.Any(s => s.Rank < 1)) issues.Add("Some base skills are below the minimum of 1.");
+        // TODO: Validate capabilities
+        if (Moves.Count == 0) issues.Add("Missing moves.");
+        if (Abilities.Count == 0) issues.Add("Missing abilities.");
+        return issues;
+    }
+
+    protected override void OnPropertyChange(string propertyName)
+    {
+        base.OnPropertyChange(propertyName);
+        ValidationIssues = Validate();
+        base.OnPropertyChange(nameof(ValidationIssues));
+    }
+
     private string _Name = "Unnamed";
     public string Name
     {

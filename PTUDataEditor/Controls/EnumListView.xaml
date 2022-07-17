@@ -13,7 +13,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
-                        <CheckBox Margin="5,2" IsChecked="{TemplateBinding IsSelected}">
+                        <CheckBox Margin="5,2" IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
                             <ContentPresenter />
                         </CheckBox>
                     </ControlTemplate>

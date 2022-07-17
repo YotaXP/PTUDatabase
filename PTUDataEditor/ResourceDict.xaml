@@ -3,6 +3,7 @@
                     xmlns:tc="clr-namespace:PTUDataEditor.TypeConverters">
 
     <tc:BoolConverter True="{x:Static Visibility.Visible}" False="{x:Static Visibility.Hidden}" x:Key="BoolToVis" />
+    <tc:BoolConverter True="{x:Static Visibility.Hidden}" False="{x:Static Visibility.Visible}" x:Key="BoolToVisInverse" />
 
     <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
     <Style x:Key="GroupBoxFullWidthHeader" TargetType="{x:Type GroupBox}">

@@ -1,6 +1,8 @@
-﻿namespace PTUDatabase;
+﻿using System.Collections;
 
-public record Skills
+namespace PTUDatabase;
+
+public record Skills : IEnumerable<(string Name, int Rank, int Bonus)>
 {
     // Body Skills
     public (int Rank, int Bonus) Intimidate { get; init; }
@@ -44,5 +46,28 @@ public record Skills
         Command = (1, 0),
         Intuition = (1, 0),
     };
+
+    public IEnumerator<(string Name, int Rank, int Bonus)> GetEnumerator()
+    {
+        yield return ("Athletics", Athletics.Rank, Athletics.Bonus);
+        yield return ("Acrobatics", Acrobatics.Rank, Acrobatics.Bonus);
+        yield return ("Combat", Combat.Rank, Combat.Bonus);
+        yield return ("Stealth", Stealth.Rank, Stealth.Bonus);
+        yield return ("Intimidate", Intimidate.Rank, Intimidate.Bonus);
+        yield return ("Survival", Survival.Rank, Survival.Bonus);
+        yield return ("Perception", Perception.Rank, Perception.Bonus);
+        yield return ("General Edu.", GeneralEducation.Rank, GeneralEducation.Bonus);
+        yield return ("Medicine Edu.", MedicineEducation.Rank, MedicineEducation.Bonus);
+        yield return ("Occult Edu.", OccultEducation.Rank, OccultEducation.Bonus);
+        yield return ("Pokemon Edu.", PokemonEducation.Rank, PokemonEducation.Bonus);
+        yield return ("Technology Edu.", TechnologyEducation.Rank, TechnologyEducation.Bonus);
+        yield return ("Focus", Focus.Rank, Focus.Bonus);
+        yield return ("Guile", Guile.Rank, Guile.Bonus);
+        yield return ("Charm", Charm.Rank, Charm.Bonus);
+        yield return ("Command", Command.Rank, Command.Bonus);
+        yield return ("Intuition", Intuition.Rank, Intuition.Bonus);
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 

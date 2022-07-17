@@ -48,14 +48,14 @@ public record Nature
     public static readonly Nature Quirky = new() { Name = nameof(Quirky), StatChange = Stats.Zero };
     public static readonly Nature Serious = new() { Name = nameof(Serious), StatChange = Stats.Zero };
 
-    public static readonly IList<Nature> All = new[] {
-            Cuddly, Distracted, Proud, Decisive, Patient,
-            Desperate, Lonely, Adamant, Naughty, Brave,
-            Stark, Bold, Impish, Lax, Relaxed,
-            Curious, Modest, Mild, Rash, Quiet,
-            Dreamy, Calm, Gentle, Careful, Sassy,
-            Skittish, Timid, Hasty, Jolly, Naive,
-            Composed, Hardy, Docile, Bashful, Quirky, Serious,
+    public static readonly IReadOnlyList<Nature> All = new[] {
+            Cuddly, Distracted, Proud, Decisive, Patient, // +HP
+            Desperate, Lonely, Adamant, Naughty, Brave,   // +P.Atk
+            Stark, Bold, Impish, Lax, Relaxed,            // +P.Def
+            Curious, Modest, Mild, Rash, Quiet,           // +S.Atk
+            Dreamy, Calm, Gentle, Careful, Sassy,         // +S.Def
+            Skittish, Timid, Hasty, Jolly, Naive,         // +Spd
+            Composed, Hardy, Docile, Bashful, Quirky, Serious, // Neutral
         };
 }
 

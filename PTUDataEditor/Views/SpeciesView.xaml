@@ -33,7 +33,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <c:EditableListBox x:Name="FormsListBox" SelectedIndex="1" ItemsSource="{Binding Forms}" SelectedItem="{Binding SelectedForm, Mode=TwoWay}" ItemTemplate="{StaticResource BasicNameItemTemplate}" Margin="3,3,3,3" NewItem="NewForm" Grid.RowSpan="5" Grid.ColumnSpan="2" />
+        <c:EditableListBox x:Name="FormsListBox" SelectedIndex="1" ItemsSource="{Binding Forms}" SelectedItem="{Binding SelectedForm, Mode=TwoWay}" ItemTemplate="{StaticResource BasicNameItemTemplate}" Margin="3,3,3,3" NewItem="NewForm" Grid.RowSpan="5" Grid.ColumnSpan="2" SelectionChanged="FormsListBox_SelectionChanged" />
         
         <Label Content="Species Name:" Grid.Row="0" Grid.Column="2" />
         <TextBox Text="{Binding Name, Mode=TwoWay}" Grid.Row="0" Grid.Column="3" Margin="3" />
@@ -58,13 +58,13 @@
         <Label Content="Types:" Grid.Row="4" Grid.Column="2" />
         <ToggleButton x:Name="TypesBtn" IsChecked="{Binding IsOpen, ElementName=TypesPopup}" Content="None" Grid.Row="4" Grid.Column="3" Margin="3" />
         <Popup x:Name="TypesPopup" PlacementTarget="{Binding ElementName=TypesBtn}" Placement="Bottom" StaysOpen="False">
-            <c:EnumListView x:Name="TypesList" EnumType="{x:Type ptu:PokemonType}" Selected="TypesChanged" Unselected="TypesChanged" />
+            <c:EnumListView x:Name="TypesList" EnumType="{x:Type ptu:PokemonType}" SelectionChanged="TypesChanged" />
         </Popup>
         
         <Label Content="Egg Groups:" Grid.Row="4" Grid.Column="4" />
         <ToggleButton x:Name="EggGroupsBtn" IsChecked="{Binding IsOpen, ElementName=EggGroupsPopup}" Content="None" Grid.Row="4" Grid.Column="5" Margin="3" />
         <Popup x:Name="EggGroupsPopup" PlacementTarget="{Binding ElementName=EggGroupsBtn}" Placement="Bottom" StaysOpen="False">
-            <c:EnumListView x:Name="EggGroupsList" EnumType="{x:Type ptu:EggGroup}" Selected="EggGroupsChanged" Unselected="EggGroupsChanged" />
+            <c:EnumListView x:Name="EggGroupsList" EnumType="{x:Type ptu:EggGroup}" SelectionChanged="EggGroupsChanged" />
         </Popup>
 
         <Label Content="Avg. Weight:" Grid.Row="5" Grid.Column="0" />
@@ -96,7 +96,10 @@
         <Label Content="Male/Female Ratio:" Grid.Row="5" Grid.Column="4" />
         <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="5">
             <CheckBox IsChecked="{Binding SelectedForm.HasGender, Mode=TwoWay}" VerticalAlignment="Center" />
-            <tk:SingleUpDown Width="60" Value="{Binding SelectedForm.MaleFemaleRatio}" Visibility="{Binding SelectedForm.HasGender, Converter={StaticResource BoolToVis}}" Minimum="0" Maximum="1" Increment="0.05" FormatString="0.#%" Margin="3" />
+            <Grid>
+                <tk:SingleUpDown Width="60" Value="{Binding SelectedForm.MaleFemaleRatio}" Visibility="{Binding SelectedForm.HasGender, Converter={StaticResource BoolToVis}}" Minimum="0" Maximum="1" Increment="0.05" FormatString="0.#%" Margin="3" />
+                <Label Visibility="{Binding SelectedForm.HasGender, Converter={StaticResource BoolToVisInverse}}" Content="Genderless" />
+            </Grid>
         </StackPanel>
         
         <Label Content="Base Stats:" Grid.Row="6" Grid.Column="0" />
