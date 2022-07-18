@@ -1,8 +1,9 @@
-﻿using PTUDatabase;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using PTUDatabase;
 
 namespace PTUDataEditor.ViewModels;
 
-public class AbilityViewModel : ViewModelBase
+public partial class AbilityViewModel : ObservableObject
 {
     public Ability Model
     {
@@ -42,47 +43,24 @@ public class AbilityViewModel : ViewModelBase
         Model = model;
     }
 
+    [ObservableProperty]
     private string _Name = "Unnamed";
-    public string Name
-    {
-        get => _Name;
-        set => SetProperty(ref _Name, value, nameof(Name));
-    }
 
+    [ObservableProperty]
     private string _Trigger = "";
-    public string Trigger
-    {
-        get => _Trigger;
-        set => SetProperty(ref _Trigger, value, nameof(Trigger));
-    }
 
+    [ObservableProperty]
     private string _Target = "";
-    public string Target
-    {
-        get => _Target;
-        set => SetProperty(ref _Target, value, nameof(Target));
-    }
 
+    [ObservableProperty]
     private string _Effect = "";
-    public string Effect
-    {
-        get => _Effect;
-        set => SetProperty(ref _Effect, value, nameof(Effect));
-    }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(FrequencyCountVisible))]
     private FrequencyType _FrequencyType = FrequencyType.Static;
-    public FrequencyType FrequencyType
-    {
-        get => _FrequencyType;
-        set => SetProperty(ref _FrequencyType, value, nameof(FrequencyType), nameof(FrequencyCountVisible));
-    }
 
+    [ObservableProperty]
     private int _FrequencyCount = 1;
-    public int FrequencyCount
-    {
-        get => _FrequencyCount;
-        set => SetProperty(ref _FrequencyCount, value, nameof(FrequencyCount));
-    }
 
     public bool FrequencyCountVisible => FrequencyType switch
     {
@@ -90,17 +68,9 @@ public class AbilityViewModel : ViewModelBase
         _ => false,
     };
 
+    [ObservableProperty]
     private MoveRangeKeywords _Keywords = MoveRangeKeywords.None;
-    public MoveRangeKeywords Keywords
-    {
-        get => _Keywords;
-        set => SetProperty(ref _Keywords, value, nameof(Keywords));
-    }
 
+    [ObservableProperty]
     private bool _UnofficialAlternative = false;
-    public bool UnofficialAlternative
-    {
-        get => _UnofficialAlternative;
-        set => SetProperty(ref _UnofficialAlternative, value, nameof(UnofficialAlternative));
-    }
 }

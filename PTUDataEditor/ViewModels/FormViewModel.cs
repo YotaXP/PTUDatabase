@@ -1,9 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
 using PTUDatabase;
+using System.ComponentModel;
 
 namespace PTUDataEditor.ViewModels;
 
-public class FormViewModel : ViewModelBase
+public partial class FormViewModel : ObservableObject
 {
     public Form Model
     {
@@ -43,12 +45,24 @@ public class FormViewModel : ViewModelBase
         }
     }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public FormViewModel(Form model)
     {
         Model = model;
     }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    public IReadOnlyList<string> ValidationIssues { get; private set; } = Array.Empty<string>();
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        base.OnPropertyChanged(e);
+
+        if (e.PropertyName != nameof(ValidationIssues))
+            ValidationIssues = Validate();
+    }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasValidationIssues))]
+    private IReadOnlyList<string> _ValidationIssues = Array.Empty<string>();
     public bool HasValidationIssues => ValidationIssues.Count > 0;
 
     private List<string> Validate()
@@ -70,92 +84,53 @@ public class FormViewModel : ViewModelBase
         return issues;
     }
 
-    protected override void OnPropertyChange(string propertyName)
-    {
-        base.OnPropertyChange(propertyName);
-        ValidationIssues = Validate();
-        base.OnPropertyChange(nameof(ValidationIssues));
-    }
-
+    [ObservableProperty]
     private string _Name = "Unnamed";
-    public string Name
-    {
-        get => _Name;
-        set => SetProperty(ref _Name, value, nameof(Name));
-    }
 
+    [ObservableProperty]
     private string _ImageUrl = "";
-    public string ImageUrl
-    {
-        get => _ImageUrl;
-        set => SetProperty(ref _ImageUrl, value, nameof(ImageUrl));
-    }
 
+    [ObservableProperty]
     private Stats _BaseStats = Stats.Zero;
-    public Stats BaseStats
-    {
-        get => _BaseStats;
-        set => SetProperty(ref _BaseStats, value, nameof(BaseStats));
-    }
 
-    private ObservableCollection<PokemonType> _Types = null;
-    public ObservableCollection<PokemonType> Types
-    {
-        get => _Types;
-        set => SetProperty(ref _Types, value, nameof(Types));
-    }
+    [ObservableProperty]
+    private ObservableCollection<PokemonType> _Types;
 
-    private ObservableCollection<AbilityRequirement> _Abilities = null;
-    public ObservableCollection<AbilityRequirement> Abilities
-    {
-        get => _Abilities;
-        set => SetProperty(ref _Abilities, value, nameof(Abilities));
-    }
+    [ObservableProperty]
+    private ObservableCollection<AbilityRequirement> _Abilities;
 
-    private ObservableCollection<MoveRequirement> _Moves = null;
-    public ObservableCollection<MoveRequirement> Moves
-    {
-        get => _Moves;
-        set => SetProperty(ref _Moves, value, nameof(Moves));
-    }
+    [ObservableProperty]
+    private ObservableCollection<MoveRequirement> _Moves;
 
+    [ObservableProperty]
     private Skills _BaseSkills = Skills.Minimum;
-    public Skills BaseSkills
-    {
-        get => _BaseSkills;
-        set => SetProperty(ref _BaseSkills, value, nameof(BaseSkills));
-    }
 
+    [ObservableProperty]
     private Capabilities _Capabilities = Capabilities.None;
-    public Capabilities Capabilities
-    {
-        get => _Capabilities;
-        set => SetProperty(ref _Capabilities, value, nameof(Capabilities));
-    }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AverageSizeInches))]
+    [NotifyPropertyChangedFor(nameof(AverageSizeFeetInches))]
     private float _AverageSizeMeters = 0f;
-    public float AverageSizeMeters
+    public float AverageSizeInches
     {
-        get => _AverageSizeMeters;
-        set => SetProperty(ref _AverageSizeMeters, value, nameof(AverageSizeMeters), nameof(AverageSizeInches), nameof(AverageSizeFeetInches));
+        get => AverageSizeMeters * 39.37f;
+        set => AverageSizeMeters = value / 39.37f;
     }
-    public float AverageSizeInches => AverageSizeMeters * 39.37f;
     public string AverageSizeFeetInches => $"{(int)Math.Round(AverageSizeInches) / 12}' {(int)Math.Round(AverageSizeInches) % 12}\"";
 
+    [ObservableProperty]
     private SizeClass _SizeClass = SizeClass.Small;
-    public SizeClass SizeClass
-    {
-        get => _SizeClass;
-        set => SetProperty(ref _SizeClass, value, nameof(SizeClass));
-    }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AverageWeightPounds))]
+    [NotifyPropertyChangedFor(nameof(WeightClass))]
     private float _AverageWeightKilograms = 0f;
-    public float AverageWeightKilograms
+    public float AverageWeightPounds
     {
-        get => _AverageWeightKilograms;
-        set => SetProperty(ref _AverageWeightKilograms, value, nameof(AverageWeightKilograms), nameof(AverageWeightPounds), nameof(WeightClass));
+        get => AverageWeightKilograms * 2.2f;
+        set => AverageWeightKilograms = value / 2.2f;
     }
-    public float AverageWeightPounds => AverageWeightKilograms * 2.2f;
     public int WeightClass => AverageWeightKilograms switch
     {
         < 11.001f => 1,
@@ -166,31 +141,15 @@ public class FormViewModel : ViewModelBase
         _ => 6,
     };
 
+    [ObservableProperty]
     private float _MaleFemaleRatio = 0.5f;
-    public float MaleFemaleRatio
-    {
-        get => _MaleFemaleRatio;
-        set => SetProperty(ref _MaleFemaleRatio, value, nameof(MaleFemaleRatio));
-    }
 
+    [ObservableProperty]
     private bool _HasGender = true;
-    public bool HasGender
-    {
-        get => _HasGender;
-        set => SetProperty(ref _HasGender, value, nameof(HasGender));
-    }
 
-    private ObservableCollection<EggGroup> _EggGroups = null;
-    public ObservableCollection<EggGroup> EggGroups
-    {
-        get => _EggGroups;
-        set => SetProperty(ref _EggGroups, value, nameof(EggGroups));
-    }
+    [ObservableProperty]
+    private ObservableCollection<EggGroup> _EggGroups;
 
+    [ObservableProperty]
     private float _SelectionWeight = 1f;
-    public float SelectionWeight
-    {
-        get => _SelectionWeight;
-        set => SetProperty(ref _SelectionWeight, value, nameof(SelectionWeight));
-    }
 }

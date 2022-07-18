@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using PTUDataEditor.ViewModels;
 
 namespace PTUDataEditor.Controls;
 
@@ -26,7 +25,7 @@ public partial class EditableListBox : ListBox
     {
         var collection = ItemsSource as dynamic;
         if (collection is null)
-            collection = ItemsSource = new ObservableCollection<ViewModelBase>();
+            collection = ItemsSource = new ObservableCollection<object>();
         var newItem = (dynamic)NewItem!.Invoke();
         collection.Add(newItem);
         SelectedItem = newItem;

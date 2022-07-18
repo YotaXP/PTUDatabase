@@ -1,21 +1,32 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
 
-  <ItemGroup>
-      <PackageReference Include="Extended.Wpf.Toolkit" Version="4.2.0">
-          <NoWarn>NU1701</NoWarn>
-      </PackageReference>
-  </ItemGroup>
+    <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+        <!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
 
-  <ItemGroup>
-    <ProjectReference Include="..\PTUDatabase\PTUDatabase.csproj" />
-  </ItemGroup>
+        <ItemGroup>
+            <FilteredAnalyzer Include="@(Analyzer->Distinct())" />
+            <Analyzer Remove="@(Analyzer)" />
+            <Analyzer Include="@(FilteredAnalyzer)" />
+        </ItemGroup>
+    </Target>
+
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview4" />
+        <PackageReference Include="Extended.Wpf.Toolkit" Version="4.2.0">
+            <NoWarn>NU1701</NoWarn>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\PTUDatabase\PTUDatabase.csproj" />
+    </ItemGroup>
 
 </Project>

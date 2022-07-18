@@ -1,9 +1,10 @@
 ﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PTUDatabase;
 
 namespace PTUDataEditor.ViewModels;
 
-public class DatabaseViewModel : ViewModelBase
+public partial class DatabaseViewModel : ObservableObject
 {
     public Database Model
     {
@@ -36,42 +37,26 @@ public class DatabaseViewModel : ViewModelBase
 
     public ObservableCollection<SpeciesViewModel> Species { get; private set; }
 
+    [ObservableProperty]
     private SpeciesViewModel? _SelectedSpecies = null;
-    public SpeciesViewModel? SelectedSpecies
-    {
-        get => _SelectedSpecies;
-        set => SetProperty(ref _SelectedSpecies, value, nameof(SelectedSpecies));
-    }
 
 
     public ObservableCollection<MoveViewModel> Moves { get; private set; }
 
+    [ObservableProperty]
     private MoveViewModel? _SelectedMove = null;
-    public MoveViewModel? SelectedMove
-    {
-        get => _SelectedMove;
-        set => SetProperty(ref _SelectedMove, value, nameof(SelectedMove));
-    }
 
 
     public ObservableCollection<AbilityViewModel> Abilities { get; private set; }
 
+    [ObservableProperty]
     private AbilityViewModel? _SelectedAbility = null;
-    public AbilityViewModel? SelectedAbility
-    {
-        get => _SelectedAbility;
-        set => SetProperty(ref _SelectedAbility, value, nameof(SelectedAbility));
-    }
 
 
     public ObservableCollection<ContestEffectViewModel> ContestEffects { get; private set; }
 
+    [ObservableProperty]
     private ContestEffectViewModel? _SelectedContestEffect = null;
-    public ContestEffectViewModel? SelectedContestEffect
-    {
-        get => _SelectedContestEffect;
-        set => SetProperty(ref _SelectedContestEffect, value, nameof(SelectedContestEffect));
-    }
 
 #if DEBUG
     public static DatabaseViewModel DesignData { get; } = new DatabaseViewModel(Database.Load(GetDesignDataPath()));

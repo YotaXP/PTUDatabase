@@ -1,31 +1,15 @@
-﻿namespace PTUDataEditor.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class EnumFlagViewModel : ViewModelBase
+namespace PTUDataEditor.ViewModels;
+
+public partial class EnumFlagViewModel : ObservableObject
 {
+    [ObservableProperty]
     private object _EnumFlag = 0;
-    public object EnumFlag
-    {
-        get => _EnumFlag;
-        set => SetProperty(ref _EnumFlag, value, nameof(EnumFlag));
-    }
 
+    [ObservableProperty]
     private bool _Selected = false;
-    public bool Selected
-    {
-        get => _Selected;
-        set
-        {
-            SetProperty(ref _Selected, value, nameof(Selected));
-            SelectedChanged?.Invoke(this);
-        }
-    }
 
+    [ObservableProperty]
     private string _Name = "";
-    public string Name
-    {
-        get => _Name;
-        set => SetProperty(ref _Name, value, nameof(Name));
-    }
-
-    public event Action<EnumFlagViewModel>? SelectedChanged;
 }

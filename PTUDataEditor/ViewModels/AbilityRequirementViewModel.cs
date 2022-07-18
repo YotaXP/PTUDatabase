@@ -1,8 +1,9 @@
-﻿using PTUDatabase;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using PTUDatabase;
 
 namespace PTUDataEditor.ViewModels;
 
-public class AbilityRequirementViewModel : ViewModelBase
+public partial class AbilityRequirementViewModel : ObservableObject
 {
     public AbilityRequirement Model
     {
@@ -24,18 +25,10 @@ public class AbilityRequirementViewModel : ViewModelBase
         Model = model;
     }
 
+    [ObservableProperty]
     private AbilityRequirementType _RequirementType = AbilityRequirementType.Basic;
-    public AbilityRequirementType RequirementType
-    {
-        get => _RequirementType;
-        set => SetProperty(ref _RequirementType, value, nameof(RequirementType));
-    }
 
+    [ObservableProperty]
     private AbilityViewModel? _Ability = null;
-    public AbilityViewModel? Ability
-    {
-        get => _Ability;
-        set => SetProperty(ref _Ability, value, nameof(Ability));
-    }
 
 }

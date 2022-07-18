@@ -1,8 +1,9 @@
-﻿using PTUDatabase;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using PTUDatabase;
 
 namespace PTUDataEditor.ViewModels;
 
-public class MoveViewModel : ViewModelBase
+public partial class MoveViewModel : ObservableObject
 {
     public Move Model
     {
@@ -53,56 +54,30 @@ public class MoveViewModel : ViewModelBase
 
     public DatabaseViewModel RootDB { get; set; }
 
+    [ObservableProperty]
     private string _Name = "Unnamed";
-    public string Name
-    {
-        get => _Name;
-        set => SetProperty(ref _Name, value, nameof(Name));
-    }
 
+    [ObservableProperty]
     private PokemonType _Type = PokemonType.Unknown;
-    public PokemonType Type
-    {
-        get => _Type;
-        set => SetProperty(ref _Type, value, nameof(Type));
-    }
 
+    [ObservableProperty]
     private MoveClass _Class = MoveClass.Status;
-    public MoveClass Class
-    {
-        get => _Class;
-        set => SetProperty(ref _Class, value, nameof(Class));
-    }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DamageRoll))]
     private int _DamageBase = 1;
-    public int DamageBase
-    {
-        get => _DamageBase;
-        set => SetProperty(ref _DamageBase, value, nameof(DamageBase), nameof(DamageRoll));
-    }
-
-    private bool _HasDamageBase = false;
-    public bool HasDamageBase
-    {
-        get => _HasDamageBase;
-        set => SetProperty(ref _HasDamageBase, value, nameof(HasDamageBase));
-    }
 
     public string DamageRoll => Move.DamageBaseData[DamageBase].Dice;
 
-    private FrequencyType _FrequencyType = FrequencyType.AtWill;
-    public FrequencyType FrequencyType
-    {
-        get => _FrequencyType;
-        set => SetProperty(ref _FrequencyType, value, nameof(FrequencyType), nameof(FrequencyCountVisible));
-    }
+    [ObservableProperty]
+    private bool _HasDamageBase = false;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(FrequencyCountVisible))]
+    private FrequencyType _FrequencyType = FrequencyType.AtWill;
+
+    [ObservableProperty]
     private int _FrequencyCount = 1;
-    public int FrequencyCount
-    {
-        get => _FrequencyCount;
-        set => SetProperty(ref _FrequencyCount, value, nameof(FrequencyCount));
-    }
 
     public bool FrequencyCountVisible => FrequencyType switch
     {
@@ -110,59 +85,27 @@ public class MoveViewModel : ViewModelBase
         _ => false,
     };
 
+    [ObservableProperty]
     private int _AccuracyCheck = 0;
-    public int AccuracyCheck
-    {
-        get => _AccuracyCheck;
-        set => SetProperty(ref _AccuracyCheck, value, nameof(AccuracyCheck));
-    }
 
+    [ObservableProperty]
     private bool _HasAccuracyCheck = false;
-    public bool HasAccuracyCheck
-    {
-        get => _HasAccuracyCheck;
-        set => SetProperty(ref _HasAccuracyCheck, value, nameof(HasAccuracyCheck));
-    }
 
+    [ObservableProperty]
     private string _Range = "";
-    public string Range
-    {
-        get => _Range;
-        set => SetProperty(ref _Range, value, nameof(Range));
-    }
 
+    [ObservableProperty]
     private ContestType _ContestType = ContestType.None;
-    public ContestType ContestType
-    {
-        get => _ContestType;
-        set => SetProperty(ref _ContestType, value, nameof(ContestType));
-    }
 
+    [ObservableProperty]
     private bool _HasContestEffect = false;
-    public bool HasContestEffect
-    {
-        get => _HasContestEffect;
-        set => SetProperty(ref _HasContestEffect, value, nameof(HasContestEffect));
-    }
 
+    [ObservableProperty]
     private ContestEffectViewModel? _MoveContestEffect = null;
-    public ContestEffectViewModel? MoveContestEffect
-    {
-        get => _MoveContestEffect;
-        set => SetProperty(ref _MoveContestEffect, value, nameof(ContestEffect));
-    }
 
+    [ObservableProperty]
     private string _Effects = "";
-    public string Effects
-    {
-        get => _Effects;
-        set => SetProperty(ref _Effects, value, nameof(Effects));
-    }
 
+    [ObservableProperty]
     private bool _UnofficialAlternative = false;
-    public bool UnofficialAlternative
-    {
-        get => _UnofficialAlternative;
-        set => SetProperty(ref _UnofficialAlternative, value, nameof(UnofficialAlternative));
-    }
 }

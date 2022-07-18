@@ -1,8 +1,9 @@
-﻿using PTUDatabase;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using PTUDatabase;
 
 namespace PTUDataEditor.ViewModels;
 
-public class ContestEffectViewModel : ViewModelBase
+public partial class ContestEffectViewModel : ObservableObject
 {
     public ContestEffect Model
     {
@@ -15,7 +16,7 @@ public class ContestEffectViewModel : ViewModelBase
         private set
         {
             Name = value.Name;
-            SetProperty(ref _Dice, value.Dice ?? 0, nameof(Dice), nameof(DiceString), nameof(UsesVariableDice));
+            Dice = value.Dice ?? 0;
             Effect = value.Effect;
         }
     }
@@ -25,19 +26,13 @@ public class ContestEffectViewModel : ViewModelBase
         Model = model;
     }
 
+    [ObservableProperty]
     private string _Name = "Unnamed";
-    public string Name
-    {
-        get => _Name;
-        set => SetProperty(ref _Name, value, nameof(Name));
-    }
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DiceString))]
+    [NotifyPropertyChangedFor(nameof(UsesVariableDice))]
     private int _Dice = 0;
-    public int Dice
-    {
-        get => _Dice;
-        set => SetProperty(ref _Dice, value, nameof(Dice), nameof(DiceString), nameof(UsesVariableDice));
-    }
 
     public string DiceString => _Dice == 0 ? "Xd6" : $"{_Dice}d6";
 
@@ -47,16 +42,12 @@ public class ContestEffectViewModel : ViewModelBase
         set
         {
             if (value && _Dice != 0)
-                SetProperty(ref _Dice, 0, nameof(Dice), nameof(DiceString), nameof(UsesVariableDice));
+                Dice = 0;
             else if (!value && _Dice == 0)
-                SetProperty(ref _Dice, 1, nameof(Dice), nameof(DiceString), nameof(UsesVariableDice));
+                Dice = 1;
         }
     }
 
+    [ObservableProperty]
     private string _Effect = "No effect.";
-    public string Effect
-    {
-        get => _Effect;
-        set => SetProperty(ref _Effect, value, nameof(Effect));
-    }
 }

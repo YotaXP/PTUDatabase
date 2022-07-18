@@ -36,7 +36,7 @@ public partial class EnumFlagsListView : ListView, INotifyPropertyChanged
 
         if (listItems is not null)
             foreach (var item in listItems)
-                item.SelectedChanged -= Item_SelectedChanged;
+                item.PropertyChanged -= Item_SelectedChanged;
 
         var values = Enum.GetValues(EnumType);
         var valueInt = Convert.ToUInt64(Value);
@@ -58,12 +58,12 @@ public partial class EnumFlagsListView : ListView, INotifyPropertyChanged
         BindingOperations.SetBinding(this, ItemsSourceProperty, new Binding() { Source = cv });
 
         foreach (var item in listItems)
-            item.SelectedChanged += Item_SelectedChanged;
+            item.PropertyChanged += Item_SelectedChanged;
     }
 
-    private void Item_SelectedChanged(EnumFlagViewModel obj)
+    private void Item_SelectedChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (suppressUpdate) return;
+        if (suppressUpdate || e.PropertyName != nameof(EnumFlagViewModel.Selected)) return;
 
         ulong value = 0UL;
         foreach (var item in listItems)

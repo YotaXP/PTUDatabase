@@ -1,9 +1,10 @@
 ﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PTUDatabase;
 
 namespace PTUDataEditor.ViewModels;
 
-public class SpeciesViewModel : ViewModelBase
+public partial class SpeciesViewModel : ObservableObject
 {
     public Species Model
     {
@@ -26,52 +27,31 @@ public class SpeciesViewModel : ViewModelBase
         }
     }
 
+    
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public SpeciesViewModel(Species model)
     {
         Model = model;
     }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
+    [ObservableProperty]
     private string _Name = "Unnamed";
-    public string Name
-    {
-        get => _Name;
-        set => SetProperty(ref _Name, value, nameof(Name));
-    }
 
-    private ObservableCollection<FormViewModel> _Forms = null;
-    public ObservableCollection<FormViewModel> Forms
-    {
-        get => _Forms;
-        set => SetProperty(ref _Forms, value, nameof(Forms));
-    }
+    [ObservableProperty]
+    private ObservableCollection<FormViewModel> _Forms;
 
 
-    private FormViewModel _SelectedForm = null;
-    public FormViewModel SelectedForm
-    {
-        get => _SelectedForm;
-        set => SetProperty(ref _SelectedForm, value, nameof(SelectedForm));
-    }
+    [ObservableProperty]
+    private FormViewModel? _SelectedForm = null;
 
+    [ObservableProperty]
     private int _NationalDexNumber = 0;
-    public int NationalDexNumber
-    {
-        get => _NationalDexNumber;
-        set => SetProperty(ref _NationalDexNumber, value, nameof(NationalDexNumber));
-    }
 
+    [ObservableProperty]
     private Rarity _Rarity = Rarity.Common;
-    public Rarity Rarity
-    {
-        get => _Rarity;
-        set => SetProperty(ref _Rarity, value, nameof(Rarity));
-    }
 
+    [ObservableProperty]
     private int _MinimumLevel = 1;
-    public int MinimumLevel
-    {
-        get => _MinimumLevel;
-        set => SetProperty(ref _MinimumLevel, value, nameof(MinimumLevel));
-    }
 
 }
