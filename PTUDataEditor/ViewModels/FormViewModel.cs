@@ -2,10 +2,11 @@
 using System.Collections.ObjectModel;
 using PTUDatabase;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace PTUDataEditor.ViewModels;
 
-public partial class FormViewModel : ObservableObject
+public partial class FormViewModel : ObservableValidator
 {
     public Form Model
     {
@@ -16,7 +17,7 @@ public partial class FormViewModel : ObservableObject
             BaseStats = BaseStats,
             Types = Types,
             Abilities = Abilities,
-            Moves = Moves,
+            Moves = Moves.Select(mvm => mvm.Model).ToList(),
             BaseSkills = BaseSkills,
             Capabilities = Capabilities,
             AverageSize = (AverageSizeMeters, AverageSizeInches, SizeClass),
@@ -32,7 +33,7 @@ public partial class FormViewModel : ObservableObject
             BaseStats = value.BaseStats;
             Types = new ObservableCollection<PokemonType>(value.Types);
             Abilities = new ObservableCollection<AbilityRequirement>(value.Abilities);
-            Moves = new ObservableCollection<MoveRequirement>(value.Moves);
+            Moves = new ObservableCollection<MoveRequirementViewModel>(value.Moves.Select(move => new MoveRequirementViewModel(move, RootDB)));
             BaseSkills = value.BaseSkills;
             Capabilities = value.Capabilities;
             AverageSizeMeters = value.AverageSize.Meters;
@@ -46,17 +47,20 @@ public partial class FormViewModel : ObservableObject
     }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    public FormViewModel(Form model)
+    public FormViewModel(Form model, DatabaseViewModel db)
     {
+        RootDB = db;
         Model = model;
     }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    public DatabaseViewModel RootDB { get; private set; }
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnPropertyChanged(e);
 
-        if (e.PropertyName != nameof(ValidationIssues))
+        if (e.PropertyName is not nameof(ValidationIssues) and not nameof(HasValidationIssues))
             ValidationIssues = Validate();
     }
 
@@ -70,8 +74,8 @@ public partial class FormViewModel : ObservableObject
         var issues = new List<string>();
         if (string.IsNullOrEmpty(Name)) issues.Add("Missing form name.");
         if (SelectionWeight < 0) issues.Add("Selection weight must be >= 0.");
-        if (Types.Count == 0) issues.Add("Missing types.");
-        if (EggGroups.Count == 0) issues.Add("Missing egg groups.");
+        if (Types?.Count is null or 0) issues.Add("Missing types.");
+        if (EggGroups?.Count is null or 0) issues.Add("Missing egg groups.");
         if (AverageWeightKilograms == 0) issues.Add("Missing weight.");
         if (AverageSizeMeters == 0) issues.Add("Missing size.");
         if (string.IsNullOrEmpty(ImageUrl)) issues.Add("Missing image.");
@@ -79,8 +83,8 @@ public partial class FormViewModel : ObservableObject
         if (BaseSkills == Skills.Zero) issues.Add("Missing base skills.");
         if (BaseSkills.Any(s => s.Rank < 1)) issues.Add("Some base skills are below the minimum of 1.");
         // TODO: Validate capabilities
-        if (Moves.Count == 0) issues.Add("Missing moves.");
-        if (Abilities.Count == 0) issues.Add("Missing abilities.");
+        if (Moves?.Count is null or 0) issues.Add("Missing moves.");
+        if (Abilities?.Count is null or 0) issues.Add("Missing abilities.");
         return issues;
     }
 
@@ -100,7 +104,7 @@ public partial class FormViewModel : ObservableObject
     private ObservableCollection<AbilityRequirement> _Abilities;
 
     [ObservableProperty]
-    private ObservableCollection<MoveRequirement> _Moves;
+    private ObservableCollection<MoveRequirementViewModel> _Moves;
 
     [ObservableProperty]
     private Skills _BaseSkills = Skills.Minimum;

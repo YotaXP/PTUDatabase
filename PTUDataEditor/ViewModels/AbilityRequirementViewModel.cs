@@ -10,7 +10,7 @@ public partial class AbilityRequirementViewModel : ObservableObject
         get => new()
         {
             RequirementType = RequirementType,
-            Ability = Ability!.Model,
+            Ability = false ? Ability.Model : throw new NotImplementedException("HELP"), // TODO: IMPORTANT! This needs to provide the correct INSTANCE! Not create a new one!
         };
         init
         {

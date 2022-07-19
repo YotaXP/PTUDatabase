@@ -20,7 +20,7 @@ public partial class DatabaseView : UserControl
     }
 
 #pragma warning disable CA1822, IDE0051 // Mark members as static, Remove unused private members
-    private object NewSpecies() => new SpeciesViewModel(new PTUDatabase.Species() { Name = "*New Species", Forms = new PTUDatabase.Form[] { new() { Name = "Normal" } } });
+    private object NewSpecies() => new SpeciesViewModel(new PTUDatabase.Species() { Name = "*New Species", Forms = new PTUDatabase.Form[] { new() { Name = "Normal" } } }, (DatabaseViewModel)DataContext);
     private object NewMove() => new MoveViewModel(new PTUDatabase.Move() { Name = "*New Move" }, (DatabaseViewModel)DataContext);
     private object NewAbility() => new AbilityViewModel(new PTUDatabase.Ability() { Name = "*New Ability" });
     private object NewContestEffect() => new ContestEffectViewModel(new PTUDatabase.ContestEffect() { Name = "*New Contest Effect" });

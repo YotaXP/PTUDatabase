@@ -19,7 +19,7 @@ public partial class SpeciesViewModel : ObservableObject
         private set
         {
             Name = value.Name;
-            Forms = new ObservableCollection<FormViewModel>(value.Forms.Select(m => new FormViewModel(m)));
+            Forms = new ObservableCollection<FormViewModel>(value.Forms.Select(m => new FormViewModel(m, RootDB)));
             SelectedForm = Forms.FirstOrDefault();
             NationalDexNumber = value.NationalDexNumber ?? 0;
             Rarity = value.Rarity;
@@ -29,11 +29,16 @@ public partial class SpeciesViewModel : ObservableObject
 
     
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    public SpeciesViewModel(Species model)
+    public SpeciesViewModel(Species model, DatabaseViewModel db)
     {
+        RootDB = db;
         Model = model;
     }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
+    public static readonly IEnumerable<MoveRequirementType> MoveRequirementTypes = Enum.GetValues(typeof(MoveRequirementType)).Cast<MoveRequirementType>();
+
+    public DatabaseViewModel RootDB { get; private set; }
 
     [ObservableProperty]
     private string _Name = "Unnamed";

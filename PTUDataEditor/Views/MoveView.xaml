@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PTUDataEditor.Views"
              xmlns:tk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:c="clr-namespace:PTUDataEditor.Controls"
              xmlns:ptu="clr-namespace:PTUDatabase;assembly=PTUDatabase"
              xmlns:tc="clr-namespace:PTUDataEditor.TypeConverters"
              mc:Ignorable="d" 
@@ -31,13 +30,13 @@
         <TextBox Text="{Binding Name, Mode=TwoWay}" Grid.Column="1" Margin="3" />
 
         <Label Content="Type:" Grid.Row="1" />
-        <c:EnumComboBox Text="{Binding Type, Mode=TwoWay}" EnumType="{x:Type ptu:PokemonType}" Grid.Row="1" Grid.Column="1" Margin="3" />
+        <ComboBox SelectedValue="{Binding Type, Mode=TwoWay}" ItemsSource="{tc:Enum {x:Type ptu:PokemonType}}" SelectedValuePath="Value" DisplayMemberPath="Description" Grid.Row="1" Grid.Column="1" Margin="3" />
 
         <Label Content="Class:" Grid.Row="2" />
-        <c:EnumComboBox Text="{Binding Class, Mode=TwoWay}" EnumType="{x:Type ptu:MoveClass}" Grid.Row="2" Grid.Column="1" Margin="3" />
+        <ComboBox SelectedValue="{Binding Class, Mode=TwoWay}" ItemsSource="{tc:Enum {x:Type ptu:MoveClass}}" SelectedValuePath="Value" DisplayMemberPath="Description" Grid.Row="2" Grid.Column="1" Margin="3" />
 
         <Label Content="Contest Type:" Grid.Row="3" />
-        <c:EnumComboBox Text="{Binding ContestType, Mode=TwoWay}" EnumType="{x:Type ptu:ContestType}" Grid.Row="3" Grid.Column="1" Margin="3" />
+        <ComboBox SelectedValue="{Binding ContestType, Mode=TwoWay}" ItemsSource="{tc:Enum {x:Type ptu:ContestType}}" SelectedValuePath="Value" DisplayMemberPath="Description" Grid.Row="3" Grid.Column="1" Margin="3" />
 
         <Label Content="Contest Effect:" Grid.Row="4" />
         <DockPanel Grid.Row="4" Grid.Column="1">
@@ -66,7 +65,7 @@
 
         <Label Content="Frequency:" Grid.Row="2" Grid.Column="2" />
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="3">
-            <c:EnumComboBox SelectedItem="{Binding FrequencyType, Mode=TwoWay}" EnumType="{x:Type ptu:FrequencyType}" MinWidth="70" Margin="3" />
+            <ComboBox SelectedValue="{Binding FrequencyType, Mode=TwoWay}" ItemsSource="{tc:Enum {x:Type ptu:FrequencyType}}" SelectedValuePath="Value" DisplayMemberPath="Description" MinWidth="70" Margin="3" />
             <StackPanel Orientation="Horizontal" Visibility="{Binding FrequencyCountVisible, Converter={StaticResource BoolToVis}}">
                 <TextBlock Text="x" VerticalAlignment="Center" />
                 <tk:IntegerUpDown Value="{Binding FrequencyCount, Mode=TwoWay}" Minimum="1" MinWidth="55" Margin="3" />

@@ -13,7 +13,7 @@ public partial class SpeciesView : UserControl
     }
 
 #pragma warning disable CA1822, IDE0051 // Mark members as static, Remove unused private members
-    private object NewForm() => new FormViewModel(new PTUDatabase.Form() { Name = "*New Form" });
+    private object NewForm() => new FormViewModel(new PTUDatabase.Form() { Name = "*New Form" }, ((SpeciesViewModel)DataContext).RootDB);
 #pragma warning restore CA1822, IDE0051 // Mark members as static, Remove unused private members
 
 

@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:PTUDataEditor.Views"
              xmlns:tk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:c="clr-namespace:PTUDataEditor.Controls"
+             xmlns:tc="clr-namespace:PTUDataEditor.TypeConverters"
              xmlns:ptu="clr-namespace:PTUDatabase;assembly=PTUDatabase"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -35,7 +36,7 @@
 
         <Label Content="Frequency:" Grid.Row="3"  />
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1">
-            <c:EnumComboBox SelectedItem="{Binding FrequencyType, Mode=TwoWay}" EnumType="{x:Type ptu:FrequencyType}" MinWidth="70" Margin="3" />
+            <ComboBox SelectedValue="{Binding FrequencyType, Mode=TwoWay}" ItemsSource="{tc:Enum {x:Type ptu:FrequencyType}}" SelectedValuePath="Value" DisplayMemberPath="Description" MinWidth="70" Margin="3" />
             <StackPanel Orientation="Horizontal" Visibility="{Binding FrequencyCountVisible, Converter={StaticResource BoolToVis}}">
                 <TextBlock VerticalAlignment="Center">×</TextBlock>
                 <tk:IntegerUpDown Value="{Binding FrequencyCount, Mode=TwoWay}" Minimum="1" MinWidth="55" Margin="3" />

@@ -20,20 +20,16 @@ public partial class DatabaseViewModel : ObservableObject
             ContestEffects = new ObservableCollection<ContestEffectViewModel>(value.ContestEffects.Select(ce => new ContestEffectViewModel(ce)));
             Abilities = new ObservableCollection<AbilityViewModel>(value.Abilities.Select(a => new AbilityViewModel(a)));
             Moves = new ObservableCollection<MoveViewModel>(value.Moves.Select(m => new MoveViewModel(m, this)));
-            Species = new ObservableCollection<SpeciesViewModel>(value.Species.Select(s => new SpeciesViewModel(s)));
+            Species = new ObservableCollection<SpeciesViewModel>(value.Species.Select(s => new SpeciesViewModel(s, this)));
         }
     }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public DatabaseViewModel(Database model)
     {
-        //Model = model;
-        // Code inlined below to avoid nagging about null values
-        ContestEffects = new ObservableCollection<ContestEffectViewModel>(model.ContestEffects.Select(ce => new ContestEffectViewModel(ce)));
-        Abilities = new ObservableCollection<AbilityViewModel>(model.Abilities.Select(a => new AbilityViewModel(a)));
-        Moves = new ObservableCollection<MoveViewModel>(model.Moves.Select(m => new MoveViewModel(m, this)));
-        Species = new ObservableCollection<SpeciesViewModel>(model.Species.Select(s => new SpeciesViewModel(s)));
+        Model = model;
     }
-
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     public ObservableCollection<SpeciesViewModel> Species { get; private set; }
 
