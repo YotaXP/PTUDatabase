@@ -5,30 +5,28 @@ namespace PTUDataEditor.ViewModels;
 
 public partial class AbilityRequirementViewModel : ObservableObject
 {
-    public AbilityRequirement Model
+    public AbilityRequirement BuildModel(IReadOnlyList<Ability> allAbilities) => new()
     {
-        get => new()
-        {
-            RequirementType = RequirementType,
-            Ability = false ? Ability.Model : throw new NotImplementedException("HELP"), // TODO: IMPORTANT! This needs to provide the correct INSTANCE! Not create a new one!
-        };
-        init
-        {
-            RequirementType = value.RequirementType;
-            Ability = new AbilityViewModel(value.Ability);
-        }
+        RequirementType = RequirementType,
+        Ability = allAbilities.First(a => a.Name == Ability.Name), // TODO: Ensure that removing abilities from the full list also removes them per-form.
+    };
+
+    public AbilityRequirementViewModel(AbilityRequirement model, IReadOnlyList<AbilityViewModel> allAbilities)
+    {
+        _RequirementType = model.RequirementType;
+        _Ability = allAbilities.First(avm => avm.Name == model.Ability.Name);
     }
 
-
-    public AbilityRequirementViewModel(AbilityRequirement model)
+    public AbilityRequirementViewModel(AbilityViewModel ability, AbilityRequirementType requirementType = AbilityRequirementType.Basic)
     {
-        Model = model;
+        _RequirementType = requirementType;
+        _Ability = ability;
     }
 
     [ObservableProperty]
-    private AbilityRequirementType _RequirementType = AbilityRequirementType.Basic;
+    private AbilityRequirementType _RequirementType;
 
     [ObservableProperty]
-    private AbilityViewModel? _Ability = null;
+    private AbilityViewModel _Ability;
 
 }

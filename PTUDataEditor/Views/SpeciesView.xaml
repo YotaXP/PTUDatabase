@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PTUDataEditor.Views.SpeciesView"
+﻿<UserControl x:Class="PTUDataEditor.Views.SpeciesView" x:Name="Root"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -34,9 +34,9 @@
             <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="160"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <c:EditableListBox x:Name="FormsListBox" SelectedIndex="1" ItemsSource="{Binding Forms}" SelectedItem="{Binding SelectedForm, Mode=TwoWay}"
                            ItemTemplate="{StaticResource BasicNameItemTemplate}" Margin="3" NewItem="NewForm" Grid.RowSpan="5" Grid.ColumnSpan="2" SelectionChanged="FormsListBox_SelectionChanged" />
@@ -126,69 +126,84 @@
         </GroupBox>
 
         <GroupBox Header="Moves:" Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" Margin="3">
-            <!--<ItemsControl Margin="3" ItemsSource="{Binding SelectedForm.Moves, Mode=OneWay}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="0,0,0,-1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="50" />
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="20" />
-                            </Grid.ColumnDefinitions>
+            <DockPanel>
+                <Button DockPanel.Dock="Bottom" Content="Add Move" Command="{Binding SelectedForm.AddMoveCommand}" Margin="3" />
+                <ItemsControl Margin="3" ItemsSource="{Binding SelectedForm.Moves, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,-1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="20" />
+                                </Grid.ColumnDefinitions>
 
-                            <TextBox Grid.Column="1" Text="{Binding MachineId}" Visibility="{Binding ShowMachineBox, Converter={StaticResource BoolToVis}}" />
-                            <tk:IntegerUpDown Grid.Column="1" Value="{Binding RequiredLevel}" Minimum="1" Visibility="{Binding ShowLevelBox, Converter={StaticResource BoolToVis}}" />
-                            <ComboBox ItemsSource="{tc:Enum {x:Type ptu:MoveRequirementType}}" SelectedValuePath="Value" DisplayMemberPath="Description"
-                                      SelectedValue="{Binding RequirementType}" Grid.ColumnSpan="{Binding ShowEitherBox, Converter={StaticResource MoveRequirementColumnWidth}}" />
+                                <TextBox Grid.Column="1" Text="{Binding MachineId}" Visibility="{Binding ShowMachineBox, Converter={StaticResource BoolToVis}}" />
+                                <tk:IntegerUpDown Grid.Column="1" Value="{Binding RequiredLevel}" Minimum="1" Visibility="{Binding ShowLevelBox, Converter={StaticResource BoolToVis}}" />
+                                <ComboBox ItemsSource="{tc:Enum {x:Type ptu:MoveRequirementType}}" SelectedValuePath="Value" DisplayMemberPath="Description"
+                                          SelectedValue="{Binding RequirementType}" Grid.ColumnSpan="{Binding ShowEitherBox, Converter={StaticResource MoveRequirementColumnWidth}}" />
 
-                            <ComboBox ItemsSource="{Binding RootDB.Moves}" SelectedItem="{Binding Move}" DisplayMemberPath="Name" Grid.Column="2" />
+                                <ComboBox ItemsSource="{Binding DataContext.RootDB.Moves, RelativeSource={RelativeSource AncestorType=local:SpeciesView}}" SelectedItem="{Binding Move}" DisplayMemberPath="Name" Grid.Column="2" />
 
-                            <Button Grid.Column="3" FontSize="10">✖</Button>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+                                <Button Grid.Column="3" FontSize="10">✖</Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                <ItemsControl.Template>
-                    <ControlTemplate TargetType="ItemsControl">
-                        <ScrollViewer CanContentScroll="True" Padding="{TemplateBinding Padding}" Focusable="False">
-                            <ItemsPresenter />
-                        </ScrollViewer>
-                    </ControlTemplate>
-                </ItemsControl.Template>
-            </ItemsControl>-->
-            <ListView Margin="3" ItemsSource="{Binding SelectedForm.Moves, Mode=OneWay}" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="80" />
-                                <ColumnDefinition Width="50" />
-                                <ColumnDefinition />
-                                <ColumnDefinition Width="20" />
-                            </Grid.ColumnDefinitions>
-
-                            <TextBox Grid.Column="1" Text="{Binding MachineId}" Visibility="{Binding ShowMachineBox, Converter={StaticResource BoolToVis}}" />
-                            <tk:IntegerUpDown Grid.Column="1" Value="{Binding RequiredLevel}" Minimum="1" Visibility="{Binding ShowLevelBox, Converter={StaticResource BoolToVis}}" />
-                            <ComboBox ItemsSource="{tc:Enum {x:Type ptu:MoveRequirementType}}" SelectedValuePath="Value" DisplayMemberPath="Description"
-                                      SelectedValue="{Binding RequirementType}" Grid.ColumnSpan="{Binding ShowEitherBox, Converter={StaticResource MoveRequirementColumnWidth}}" />
-
-                            <ComboBox ItemsSource="{Binding RootDB.Moves}" SelectedItem="{Binding Move}" DisplayMemberPath="Name" Grid.Column="2" Margin="3 0" />
-
-                            <Button Grid.Column="3" FontSize="10">✖</Button>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>        
+                    <ItemsControl.Template>
+                        <ControlTemplate TargetType="ItemsControl">
+                            <ScrollViewer CanContentScroll="True" Padding="{TemplateBinding Padding}" Focusable="False">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                </ItemsControl>
+            </DockPanel>
         </GroupBox>
 
         <GroupBox Header="Abilities:" Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="2" Margin="3">
+            <DockPanel>
+                <Button DockPanel.Dock="Bottom" Content="Add Ability" Command="{Binding SelectedForm.AddAbilityCommand}" Margin="3" />
+                <ItemsControl Margin="3" ItemsSource="{Binding SelectedForm.Abilities, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,-1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="20" />
+                                </Grid.ColumnDefinitions>
 
+                                <ComboBox ItemsSource="{tc:Enum {x:Type ptu:AbilityRequirementType}}" SelectedValuePath="Value" DisplayMemberPath="Description"
+                                          SelectedValue="{Binding RequirementType}" />
+
+                                <ComboBox ItemsSource="{Binding DataContext.RootDB.Abilities, RelativeSource={RelativeSource AncestorType=local:SpeciesView}}" SelectedItem="{Binding Ability}" DisplayMemberPath="Name" Grid.Column="1" />
+
+                                <Button Grid.Column="2" FontSize="10">✖</Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.Template>
+                        <ControlTemplate TargetType="ItemsControl">
+                            <ScrollViewer CanContentScroll="True" Padding="{TemplateBinding Padding}" Focusable="False">
+                                <ItemsPresenter />
+                            </ScrollViewer>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+                </ItemsControl>
+            </DockPanel>
         </GroupBox>
 
         <ItemsControl ItemsSource="{Binding SelectedForm.ValidationIssues}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Grid.ColumnSpan="99" Grid.RowSpan="99" Margin="9" Foreground="Red" IsHitTestVisible="False" />

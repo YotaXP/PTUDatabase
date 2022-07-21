@@ -6,42 +6,33 @@ namespace PTUDataEditor.ViewModels;
 
 public partial class SpeciesViewModel : ObservableObject
 {
-    public Species Model
+    public Species BuildModel(IReadOnlyList<Move> allMoves, IReadOnlyList<Ability> allAbilities) => new()
     {
-        get => new()
-        {
-            Name = Name,
-            Forms = Forms.Select(vm => vm.Model).ToList(),
-            NationalDexNumber = NationalDexNumber == 0 ? null : NationalDexNumber,
-            Rarity = Rarity,
-            MinimumLevel = MinimumLevel,
-        };
-        private set
-        {
-            Name = value.Name;
-            Forms = new ObservableCollection<FormViewModel>(value.Forms.Select(m => new FormViewModel(m, RootDB)));
-            SelectedForm = Forms.FirstOrDefault();
-            NationalDexNumber = value.NationalDexNumber ?? 0;
-            Rarity = value.Rarity;
-            MinimumLevel = value.MinimumLevel;
-        }
-    }
+        Name = Name,
+        Forms = Forms.Select(vm => vm.BuildModel(allMoves, allAbilities)).ToList(),
+        NationalDexNumber = NationalDexNumber == 0 ? null : NationalDexNumber,
+        Rarity = Rarity,
+        MinimumLevel = MinimumLevel,
+    };
 
     
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public SpeciesViewModel(Species model, DatabaseViewModel db)
     {
+        _Name = model.Name;
+        _Forms = new ObservableCollection<FormViewModel>(model.Forms.Select(m => new FormViewModel(m, db)));
+        _SelectedForm = Forms.FirstOrDefault();
+        _NationalDexNumber = model.NationalDexNumber ?? 0;
+        _Rarity = model.Rarity;
+        _MinimumLevel = model.MinimumLevel;
         RootDB = db;
-        Model = model;
     }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     public static readonly IEnumerable<MoveRequirementType> MoveRequirementTypes = Enum.GetValues(typeof(MoveRequirementType)).Cast<MoveRequirementType>();
 
-    public DatabaseViewModel RootDB { get; private set; }
+    public DatabaseViewModel RootDB { get; }
 
     [ObservableProperty]
-    private string _Name = "Unnamed";
+    private string _Name;
 
     [ObservableProperty]
     private ObservableCollection<FormViewModel> _Forms;
@@ -51,12 +42,12 @@ public partial class SpeciesViewModel : ObservableObject
     private FormViewModel? _SelectedForm = null;
 
     [ObservableProperty]
-    private int _NationalDexNumber = 0;
+    private int _NationalDexNumber;
 
     [ObservableProperty]
-    private Rarity _Rarity = Rarity.Common;
+    private Rarity _Rarity;
 
     [ObservableProperty]
-    private int _MinimumLevel = 1;
+    private int _MinimumLevel;
 
 }

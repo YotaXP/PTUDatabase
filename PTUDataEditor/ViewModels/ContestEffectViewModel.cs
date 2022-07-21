@@ -5,34 +5,27 @@ namespace PTUDataEditor.ViewModels;
 
 public partial class ContestEffectViewModel : ObservableObject
 {
-    public ContestEffect Model
+    public ContestEffect BuildModel() => new()
     {
-        get => new()
-        {
-            Name = Name,
-            Dice = Dice == 0 ? null : Dice,
-            Effect = Effect,
-        };
-        private set
-        {
-            Name = value.Name;
-            Dice = value.Dice ?? 0;
-            Effect = value.Effect;
-        }
-    }
+        Name = Name,
+        Dice = Dice == 0 ? null : Dice,
+        Effect = Effect,
+    };
 
     public ContestEffectViewModel(ContestEffect model)
     {
-        Model = model;
+        _Name = model.Name;
+        _Dice = model.Dice ?? 0;
+        _Effect = model.Effect;
     }
 
     [ObservableProperty]
-    private string _Name = "Unnamed";
+    private string _Name;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DiceString))]
     [NotifyPropertyChangedFor(nameof(UsesVariableDice))]
-    private int _Dice = 0;
+    private int _Dice;
 
     public string DiceString => _Dice == 0 ? "Xd6" : $"{_Dice}d6";
 
@@ -49,5 +42,5 @@ public partial class ContestEffectViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private string _Effect = "No effect.";
+    private string _Effect;
 }

@@ -5,79 +5,72 @@ namespace PTUDataEditor.ViewModels;
 
 public partial class MoveViewModel : ObservableObject
 {
-    public Move Model
+    public Move BuildModel(IReadOnlyList<ContestEffect> allContestEffects) => new()
     {
-        get => new()
+        Name = Name,
+        Type = Type,
+        Class = Class,
+        DamageBase = HasDamageBase ? DamageBase : null,
+        Frequency = FrequencyType switch
         {
-            Name = Name,
-            Type = Type,
-            Class = Class,
-            DamageBase = HasDamageBase ? DamageBase : null,
-            Frequency = FrequencyType switch
-            {
-                FrequencyType.Daily or FrequencyType.Scene => new() { Type = FrequencyType, Count = FrequencyCount },
-                _ => new() { Type = FrequencyType, Count = null },
-            },
-            AccuracyCheck = HasAccuracyCheck ? AccuracyCheck : null,
-            Range = Range,
-            ContestType = ContestType,
-            ContestEffect = (HasContestEffect ? MoveContestEffect?.Model : null) ?? ContestEffect.None,
-            Effects = Effects,
-            UnofficialAlternative = UnofficialAlternative,
-        };
-        private set
-        {
-            Name = value.Name;
-            Type = value.Type;
-            Class = value.Class;
-            DamageBase = value.DamageBase ?? 1;
-            HasDamageBase = value.DamageBase is not null;
-            FrequencyType = value.Frequency.Type;
-            FrequencyCount = value.Frequency.Count ?? 1;
-            AccuracyCheck = value.AccuracyCheck ?? 0;
-            HasAccuracyCheck = value.AccuracyCheck is not null;
-            Range = value.Range;
-            ContestType = value.ContestType;
-            HasContestEffect = value.ContestEffect != ContestEffect.None;
-            MoveContestEffect = RootDB.ContestEffects.FirstOrDefault(cevm => cevm.Model == value.ContestEffect);
-            Effects = value.Effects;
-            UnofficialAlternative = value.UnofficialAlternative;
-        }
-    }
+            FrequencyType.Daily or FrequencyType.Scene => new() { Type = FrequencyType, Count = FrequencyCount },
+            _ => new() { Type = FrequencyType, Count = null },
+        },
+        AccuracyCheck = HasAccuracyCheck ? AccuracyCheck : null,
+        Range = Range,
+        ContestType = ContestType,
+        ContestEffect = (HasContestEffect ? allContestEffects.FirstOrDefault(ce => ce.Name == MoveContestEffect?.Name) : null) ?? ContestEffect.None,
+        Effects = Effects,
+        UnofficialAlternative = UnofficialAlternative,
+    };
 
 
     public MoveViewModel(Move model, DatabaseViewModel db)
     {
+        _Name = model.Name;
+        _Type = model.Type;
+        _Class = model.Class;
+        _DamageBase = model.DamageBase ?? 1;
+        _HasDamageBase = model.DamageBase is not null;
+        _FrequencyType = model.Frequency.Type;
+        _FrequencyCount = model.Frequency.Count ?? 1;
+        _AccuracyCheck = model.AccuracyCheck ?? 0;
+        _HasAccuracyCheck = model.AccuracyCheck is not null;
+        _Range = model.Range;
+        _ContestType = model.ContestType;
+        _HasContestEffect = model.ContestEffect != ContestEffect.None;
+        _MoveContestEffect = _HasContestEffect ? db.ContestEffects.FirstOrDefault(cevm => cevm.Name == model.Name) : null;
+        _Effects = model.Effects;
+        _UnofficialAlternative = model.UnofficialAlternative;
         RootDB = db;
-        Model = model;
     }
 
-    public DatabaseViewModel RootDB { get; set; }
+    public DatabaseViewModel RootDB { get; }
 
     [ObservableProperty]
-    private string _Name = "Unnamed";
+    private string _Name;
 
     [ObservableProperty]
-    private PokemonType _Type = PokemonType.Unknown;
+    private PokemonType _Type;
 
     [ObservableProperty]
-    private MoveClass _Class = MoveClass.Status;
+    private MoveClass _Class;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DamageRoll))]
-    private int _DamageBase = 1;
+    private int _DamageBase;
 
     public string DamageRoll => Move.DamageBaseData[DamageBase].Dice;
 
     [ObservableProperty]
-    private bool _HasDamageBase = false;
+    private bool _HasDamageBase;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(FrequencyCountVisible))]
-    private FrequencyType _FrequencyType = FrequencyType.AtWill;
+    private FrequencyType _FrequencyType;
 
     [ObservableProperty]
-    private int _FrequencyCount = 1;
+    private int _FrequencyCount;
 
     public bool FrequencyCountVisible => FrequencyType switch
     {
@@ -86,26 +79,26 @@ public partial class MoveViewModel : ObservableObject
     };
 
     [ObservableProperty]
-    private int _AccuracyCheck = 0;
+    private int _AccuracyCheck;
 
     [ObservableProperty]
-    private bool _HasAccuracyCheck = false;
+    private bool _HasAccuracyCheck;
 
     [ObservableProperty]
-    private string _Range = "";
+    private string _Range;
 
     [ObservableProperty]
-    private ContestType _ContestType = ContestType.None;
+    private ContestType _ContestType;
 
     [ObservableProperty]
-    private bool _HasContestEffect = false;
+    private bool _HasContestEffect;
 
     [ObservableProperty]
-    private ContestEffectViewModel? _MoveContestEffect = null;
+    private ContestEffectViewModel? _MoveContestEffect;
 
     [ObservableProperty]
-    private string _Effects = "";
+    private string _Effects;
 
     [ObservableProperty]
-    private bool _UnofficialAlternative = false;
+    private bool _UnofficialAlternative;
 }

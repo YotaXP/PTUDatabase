@@ -2,8 +2,8 @@
 
 public enum MoveRequirementType
 {
-    Egg,
     Level,
-    Tutor,
     Machine,
+    Tutor,
+    Egg,
 }

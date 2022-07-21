@@ -12,7 +12,7 @@
         <!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
 
         <ItemGroup>
-            <FilteredAnalyzer Include="@(Analyzer->Distinct())" />
+            <FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
             <Analyzer Remove="@(Analyzer)" />
             <Analyzer Include="@(FilteredAnalyzer)" />
         </ItemGroup>
@@ -20,9 +20,7 @@
 
     <ItemGroup>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview4" />
-        <PackageReference Include="Extended.Wpf.Toolkit" Version="4.2.0">
-            <NoWarn>NU1701</NoWarn>
-        </PackageReference>
+        <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="5.0.103" />
     </ItemGroup>
 
     <ItemGroup>

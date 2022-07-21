@@ -5,33 +5,29 @@ namespace PTUDataEditor.ViewModels;
 
 public partial class MoveRequirementViewModel : ObservableObject
 {
-
-    public MoveRequirement Model
+    public MoveRequirement BuildModel(IReadOnlyList<Move> allMoves) => new()
     {
-        get => new()
-        {
-             RequirementType = RequirementType,
-             RequiredLevel = RequirementType == MoveRequirementType.Level ? RequiredLevel : null,
-             MachineId = RequirementType == MoveRequirementType.Machine ? MachineId : null,
-             Move = false ? Move.Model : throw new NotImplementedException("HELP"), // TODO: IMPORTANT! This needs to provide the correct INSTANCE! Not create a new one!
-        };
-        private set
-        {
-            RequirementType = value.RequirementType;
-            RequiredLevel = value.RequiredLevel ?? 1;
-            MachineId = value.MachineId ?? "TM00";
-            Move = RootDB.Moves.FirstOrDefault(mvm => mvm.Name == value.Move.Name) ?? new MoveViewModel(value.Move, RootDB);
-        }
-    }
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-    public MoveRequirementViewModel(MoveRequirement model, DatabaseViewModel db)
-    {
-        RootDB = db;
-        Model = model;
-    }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        RequirementType = RequirementType,
+        RequiredLevel = RequirementType == MoveRequirementType.Level ? RequiredLevel : null,
+        MachineId = RequirementType == MoveRequirementType.Machine ? MachineId : null,
+        Move = allMoves.First(m => m.Name == Move.Name), // TODO: Ensure that removing moves from the full list also removes them per-form.
+    };
 
-    public DatabaseViewModel RootDB { get; private set; }
+    public MoveRequirementViewModel(MoveRequirement model, IReadOnlyList<MoveViewModel> allMoves)
+    {
+        _RequirementType = model.RequirementType;
+        _RequiredLevel = model.RequiredLevel ?? 1;
+        _MachineId = model.MachineId ?? "TM00";
+        _Move = allMoves.First(mvm => mvm.Name == model.Move.Name);
+    }
+
+    public MoveRequirementViewModel(MoveViewModel move, MoveRequirementType requirementType = MoveRequirementType.Level, int requiredLevel = 1, string machineId = "TM00")
+    {
+        _RequirementType = requirementType;
+        _RequiredLevel = requiredLevel;
+        _MachineId = machineId;
+        _Move = move;
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ShowLevelBox))]
@@ -44,10 +40,10 @@ public partial class MoveRequirementViewModel : ObservableObject
     public bool ShowEitherBox => ShowLevelBox || ShowMachineBox;
 
     [ObservableProperty]
-    private int _RequiredLevel = 1;
+    private int _RequiredLevel;
 
     [ObservableProperty]
-    private string _MachineId = "TM00";
+    private string _MachineId;
 
     [ObservableProperty]
     private MoveViewModel _Move;

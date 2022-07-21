@@ -41,7 +41,7 @@ public partial class MainWindow : Window
 
         var dbvm = DatabaseView.DataContext as DatabaseViewModel;
         if (dbvm is not null)
-            dbvm.Model.Save(OpenPath, gzip: OpenPath.EndsWith(".gz"));
+            dbvm.BuildModel().Save(OpenPath, gzip: OpenPath.EndsWith(".gz"));
     }
 
     private void MenuSaveAs_Click(object sender, RoutedEventArgs e)
@@ -59,7 +59,7 @@ public partial class MainWindow : Window
             var dbvm = DatabaseView.DataContext as DatabaseViewModel;
             if (dbvm is not null)
             {
-                dbvm.Model.Save(file, gzip: dialog.FileName!.EndsWith(".gz"));
+                dbvm.BuildModel().Save(file, gzip: dialog.FileName!.EndsWith(".gz"));
                 OpenPath = dialog.FileName;
             }
         }

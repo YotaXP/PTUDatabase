@@ -2,59 +2,50 @@
 using System.Collections.ObjectModel;
 using PTUDatabase;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using CommunityToolkit.Mvvm.Input;
 
 namespace PTUDataEditor.ViewModels;
 
-public partial class FormViewModel : ObservableValidator
+public partial class FormViewModel : ObservableObject
 {
-    public Form Model
+    public Form BuildModel(IReadOnlyList<Move> allMoves, IReadOnlyList<Ability> allAbilities) => new()
     {
-        get => new()
-        {
-            Name = Name,
-            ImageUrl = ImageUrl == "" ? null : ImageUrl,
-            BaseStats = BaseStats,
-            Types = Types,
-            Abilities = Abilities,
-            Moves = Moves.Select(mvm => mvm.Model).ToList(),
-            BaseSkills = BaseSkills,
-            Capabilities = Capabilities,
-            AverageSize = (AverageSizeMeters, AverageSizeInches, SizeClass),
-            AverageWeight = (AverageWeightKilograms, 0f, 0),
-            MaleFemaleRatio = HasGender ? MaleFemaleRatio : null,
-            EggGroups = EggGroups,
-            SelectionWeight = SelectionWeight,
-        };
-        private set
-        {
-            Name = value.Name;
-            ImageUrl = value.ImageUrl ?? "";
-            BaseStats = value.BaseStats;
-            Types = new ObservableCollection<PokemonType>(value.Types);
-            Abilities = new ObservableCollection<AbilityRequirement>(value.Abilities);
-            Moves = new ObservableCollection<MoveRequirementViewModel>(value.Moves.Select(move => new MoveRequirementViewModel(move, RootDB)));
-            BaseSkills = value.BaseSkills;
-            Capabilities = value.Capabilities;
-            AverageSizeMeters = value.AverageSize.Meters;
-            SizeClass = value.AverageSize.Class;
-            AverageWeightKilograms = value.AverageWeight.Kilograms;
-            MaleFemaleRatio = value.MaleFemaleRatio ?? 0.5f;
-            HasGender = value.MaleFemaleRatio.HasValue;
-            EggGroups = new ObservableCollection<EggGroup>(value.EggGroups);
-            SelectionWeight = value.SelectionWeight;
-        }
-    }
+        Name = Name,
+        ImageUrl = ImageUrl == "" ? null : ImageUrl,
+        BaseStats = BaseStats,
+        Types = Types,
+        Abilities = Abilities.Select(avm => avm.BuildModel(allAbilities)).ToList(),
+        Moves = Moves.Select(mvm => mvm.BuildModel(allMoves)).ToList(),
+        BaseSkills = BaseSkills,
+        Capabilities = Capabilities,
+        AverageSize = (AverageSizeMeters, AverageSizeInches, SizeClass),
+        AverageWeight = (AverageWeightKilograms, 0f, 0),
+        MaleFemaleRatio = HasGender ? MaleFemaleRatio : null,
+        EggGroups = EggGroups,
+        SelectionWeight = SelectionWeight,
+    };
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public FormViewModel(Form model, DatabaseViewModel db)
     {
-        RootDB = db;
-        Model = model;
+        _Name = model.Name;
+        _ImageUrl = model.ImageUrl ?? "";
+        _BaseStats = model.BaseStats;
+        _Types = new(model.Types);
+        _Abilities = new(model.Abilities.Select(ability => new AbilityRequirementViewModel(ability, db.Abilities)));
+        _Moves = new(model.Moves.Select(move => new MoveRequirementViewModel(move, db.Moves)));
+        _BaseSkills = model.BaseSkills;
+        _Capabilities = model.Capabilities;
+        _AverageSizeMeters = model.AverageSize.Meters;
+        _SizeClass = model.AverageSize.Class;
+        _AverageWeightKilograms = model.AverageWeight.Kilograms;
+        _MaleFemaleRatio = model.MaleFemaleRatio ?? 0.5f;
+        _HasGender = model.MaleFemaleRatio.HasValue;
+        _EggGroups = new(model.EggGroups);
+        _SelectionWeight = model.SelectionWeight;
+        rootDB = db;
     }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    public DatabaseViewModel RootDB { get; private set; }
+    private DatabaseViewModel rootDB;
 
     protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
@@ -89,22 +80,57 @@ public partial class FormViewModel : ObservableValidator
     }
 
     [ObservableProperty]
-    private string _Name = "Unnamed";
+    private string _Name;
 
     [ObservableProperty]
-    private string _ImageUrl = "";
+    private string _ImageUrl;
 
     [ObservableProperty]
-    private Stats _BaseStats = Stats.Zero;
+    private Stats _BaseStats;
 
     [ObservableProperty]
     private ObservableCollection<PokemonType> _Types;
 
     [ObservableProperty]
-    private ObservableCollection<AbilityRequirement> _Abilities;
+    private ObservableCollection<AbilityRequirementViewModel> _Abilities;
 
     [ObservableProperty]
     private ObservableCollection<MoveRequirementViewModel> _Moves;
+
+    [RelayCommand]
+    private void AddMove()
+    {
+        if (rootDB.Moves.Count == 0) return;
+        Moves.Add(new MoveRequirementViewModel(rootDB.Moves[0]));
+    }
+
+    [RelayCommand]
+    private void AddAbility()
+    {
+        if (rootDB.Abilities.Count == 0) return;
+        Abilities.Add(new AbilityRequirementViewModel(rootDB.Abilities[0]));
+    }
+
+    private void SortMovesAndAbilities()
+    {
+        var sortedMoves = Moves
+            .OrderBy(m => m.RequirementType)
+            .ThenBy(m => m.RequirementType switch
+            {
+                MoveRequirementType.Level => (IComparable)m.RequiredLevel,
+                MoveRequirementType.Machine => m.MachineId,
+                _ => 0,
+            })
+            .ThenBy(m => m.Move.Name);
+        Moves = new(sortedMoves);
+
+        var sortedAbilities = Abilities
+            .OrderBy(a => a.RequirementType)
+            .ThenBy(a => a.Ability.Name);
+        Abilities = new(sortedAbilities);
+
+    }
+
 
     [ObservableProperty]
     private Skills _BaseSkills = Skills.Minimum;
@@ -115,7 +141,7 @@ public partial class FormViewModel : ObservableValidator
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AverageSizeInches))]
     [NotifyPropertyChangedFor(nameof(AverageSizeFeetInches))]
-    private float _AverageSizeMeters = 0f;
+    private float _AverageSizeMeters;
     public float AverageSizeInches
     {
         get => AverageSizeMeters * 39.37f;
@@ -129,7 +155,7 @@ public partial class FormViewModel : ObservableValidator
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AverageWeightPounds))]
     [NotifyPropertyChangedFor(nameof(WeightClass))]
-    private float _AverageWeightKilograms = 0f;
+    private float _AverageWeightKilograms;
     public float AverageWeightPounds
     {
         get => AverageWeightKilograms * 2.2f;
@@ -146,14 +172,14 @@ public partial class FormViewModel : ObservableValidator
     };
 
     [ObservableProperty]
-    private float _MaleFemaleRatio = 0.5f;
+    private float _MaleFemaleRatio;
 
     [ObservableProperty]
-    private bool _HasGender = true;
+    private bool _HasGender;
 
     [ObservableProperty]
     private ObservableCollection<EggGroup> _EggGroups;
 
     [ObservableProperty]
-    private float _SelectionWeight = 1f;
+    private float _SelectionWeight;
 }

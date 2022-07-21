@@ -5,62 +5,55 @@ namespace PTUDataEditor.ViewModels;
 
 public partial class AbilityViewModel : ObservableObject
 {
-    public Ability Model
+    public Ability BuildModel() => new()
     {
-        get => new()
+        Name = Name,
+        Trigger = Trigger,
+        Target = Target,
+        Effect = Effect,
+        Frequency = new Frequency
         {
-            Name = Name,
-            Trigger = Trigger,
-            Target = Target,
-            Effect = Effect,
-            Frequency = new Frequency
+            Type = FrequencyType,
+            Count = FrequencyType switch
             {
-                Type = FrequencyType,
-                Count = FrequencyType switch
-                {
-                    FrequencyType.Scene or FrequencyType.Daily => FrequencyCount,
-                    _ => null,
-                },
+                FrequencyType.Scene or FrequencyType.Daily => FrequencyCount,
+                _ => null,
             },
-            Keywords = Keywords,
-            UnofficialAlternative = UnofficialAlternative,
-        };
-        private set
-        {
-            Name = value.Name;
-            Trigger = value.Trigger;
-            Target = value.Target;
-            Effect = value.Effect;
-            FrequencyType = value.Frequency.Type;
-            FrequencyCount = value.Frequency.Count ?? 1;
-            Keywords = value.Keywords;
-            UnofficialAlternative = value.UnofficialAlternative;
-        }
-    }
+        },
+        Keywords = Keywords,
+        UnofficialAlternative = UnofficialAlternative,
+    };
 
     public AbilityViewModel(Ability model)
     {
-        Model = model;
+        _Name = model.Name;
+        _Trigger = model.Trigger;
+        _Target = model.Target;
+        _Effect = model.Effect;
+        _FrequencyType = model.Frequency.Type;
+        _FrequencyCount = model.Frequency.Count ?? 1;
+        _Keywords = model.Keywords;
+        _UnofficialAlternative = model.UnofficialAlternative;
     }
 
     [ObservableProperty]
-    private string _Name = "Unnamed";
+    private string _Name;
 
     [ObservableProperty]
-    private string _Trigger = "";
+    private string _Trigger;
 
     [ObservableProperty]
-    private string _Target = "";
+    private string _Target;
 
     [ObservableProperty]
-    private string _Effect = "";
+    private string _Effect;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(FrequencyCountVisible))]
-    private FrequencyType _FrequencyType = FrequencyType.Static;
+    private FrequencyType _FrequencyType;
 
     [ObservableProperty]
-    private int _FrequencyCount = 1;
+    private int _FrequencyCount;
 
     public bool FrequencyCountVisible => FrequencyType switch
     {
@@ -69,8 +62,8 @@ public partial class AbilityViewModel : ObservableObject
     };
 
     [ObservableProperty]
-    private MoveRangeKeywords _Keywords = MoveRangeKeywords.None;
+    private MoveRangeKeywords _Keywords;
 
     [ObservableProperty]
-    private bool _UnofficialAlternative = false;
+    private bool _UnofficialAlternative;
 }

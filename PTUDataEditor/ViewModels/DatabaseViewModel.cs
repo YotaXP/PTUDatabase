@@ -6,50 +6,52 @@ namespace PTUDataEditor.ViewModels;
 
 public partial class DatabaseViewModel : ObservableObject
 {
-    public Database Model
+    public Database BuildModel()
     {
-        get => new()
+        var contestEffects = ContestEffects.Select(vm => vm.BuildModel()).ToList();
+        var moves = Moves.Select(vm => vm.BuildModel(contestEffects)).ToList();
+        var abilities = Abilities.Select(vm => vm.BuildModel()).ToList();
+        var species = Species.Select(vm => vm.BuildModel(moves, abilities)).ToList();
+        return new()
         {
-            ContestEffects = ContestEffects.Select(vm => vm.Model).ToList(),
-            Abilities = Abilities.Select(vm => vm.Model).ToList(),
-            Moves = Moves.Select(vm => vm.Model).ToList(),
-            Species = Species.Select(vm => vm.Model).ToList(),
+            ContestEffects = contestEffects,
+            Abilities = abilities,
+            Moves = moves,
+            Species = species,
         };
-        private set
-        {
-            ContestEffects = new ObservableCollection<ContestEffectViewModel>(value.ContestEffects.Select(ce => new ContestEffectViewModel(ce)));
-            Abilities = new ObservableCollection<AbilityViewModel>(value.Abilities.Select(a => new AbilityViewModel(a)));
-            Moves = new ObservableCollection<MoveViewModel>(value.Moves.Select(m => new MoveViewModel(m, this)));
-            Species = new ObservableCollection<SpeciesViewModel>(value.Species.Select(s => new SpeciesViewModel(s, this)));
-        }
     }
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public DatabaseViewModel(Database model)
     {
-        Model = model;
+        _ContestEffects = new(model.ContestEffects.Select(ce => new ContestEffectViewModel(ce)));
+        _Abilities = new(model.Abilities.Select(a => new AbilityViewModel(a)));
+        _Moves = new(model.Moves.Select(m => new MoveViewModel(m, this)));
+        _Species = new(model.Species.Select(s => new SpeciesViewModel(s, this)));
     }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    public ObservableCollection<SpeciesViewModel> Species { get; private set; }
+    [ObservableProperty]
+    private ObservableCollection<SpeciesViewModel> _Species;
 
     [ObservableProperty]
     private SpeciesViewModel? _SelectedSpecies = null;
 
 
-    public ObservableCollection<MoveViewModel> Moves { get; private set; }
+    [ObservableProperty]
+    private ObservableCollection<MoveViewModel> _Moves;
 
     [ObservableProperty]
     private MoveViewModel? _SelectedMove = null;
 
 
-    public ObservableCollection<AbilityViewModel> Abilities { get; private set; }
+    [ObservableProperty]
+    private ObservableCollection<AbilityViewModel> _Abilities;
 
     [ObservableProperty]
     private AbilityViewModel? _SelectedAbility = null;
 
 
-    public ObservableCollection<ContestEffectViewModel> ContestEffects { get; private set; }
+    [ObservableProperty]
+    private ObservableCollection<ContestEffectViewModel> _ContestEffects;
 
     [ObservableProperty]
     private ContestEffectViewModel? _SelectedContestEffect = null;
