@@ -10,7 +10,7 @@ public partial class MoveRequirementViewModel : ObservableObject
         RequirementType = RequirementType,
         RequiredLevel = RequirementType == MoveRequirementType.Level ? RequiredLevel : null,
         MachineId = RequirementType == MoveRequirementType.Machine ? MachineId : null,
-        Move = allMoves.First(m => m.Name == Move.Name), // TODO: Ensure that removing moves from the full list also removes them per-form.
+        Move = allMoves.First(m => m.Name == Move.Name),
     };
 
     public MoveRequirementViewModel(MoveRequirement model, IReadOnlyList<MoveViewModel> allMoves)

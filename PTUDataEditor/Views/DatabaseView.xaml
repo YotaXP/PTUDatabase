@@ -9,7 +9,7 @@
              xmlns:tk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:ptu="clr-namespace:PTUDatabase;assembly=PTUDatabase"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
+             d:DesignHeight="600" d:DesignWidth="1100"
              d:DataContext="{x:Static vm:DatabaseViewModel.DesignData}">
     <UserControl.Resources>
         <DataTemplate x:Key="BasicNameItemTemplate">
@@ -42,7 +42,8 @@
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <c:EditableListBox x:Name="SpeciesListBox" SelectedIndex="1" ItemsSource="{Binding Species}" SelectedItem="{Binding SelectedSpecies, Mode=TwoWay}" ItemTemplate="{StaticResource SpeciesNameItemTemplate}" Margin="3" NewItem="NewSpecies" />
+                    <c:EditableListBox x:Name="SpeciesListBox" SelectedIndex="1" ItemsSource="{Binding Species}" SelectedItem="{Binding SelectedSpecies, Mode=TwoWay}" ItemTemplate="{StaticResource SpeciesNameItemTemplate}" Margin="3"
+                                       Add="{Binding AddSpeciesCommand}" Remove="{Binding RemoveSpeciesCommand}"/>
                     <local:SpeciesView IsEnabled="{Binding SelectedItems.Count, ElementName=SpeciesListBox}" Grid.Column="1" DataContext="{Binding SelectedSpecies, Mode=OneWay}" />
                 </Grid>
             </TabItem>
@@ -52,7 +53,8 @@
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <c:EditableListBox x:Name="MovesListBox" SelectedIndex="1" ItemsSource="{Binding Moves}" SelectedItem="{Binding SelectedMove, Mode=TwoWay}" ItemTemplate="{StaticResource BasicNameItemTemplate}" Margin="3" NewItem="NewMove" />
+                    <c:EditableListBox x:Name="MovesListBox" SelectedIndex="1" ItemsSource="{Binding Moves}" SelectedItem="{Binding SelectedMove, Mode=TwoWay}" ItemTemplate="{StaticResource BasicNameItemTemplate}" Margin="3"
+                                       Add="{Binding AddMoveCommand}" Remove="{Binding RemoveMoveCommand}" />
                     <local:MoveView IsEnabled="{Binding SelectedItems.Count, ElementName=MovesListBox}" Grid.Column="1" DataContext="{Binding SelectedMove, Mode=OneWay}" />
                 </Grid>
             </TabItem>
@@ -62,7 +64,8 @@
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <c:EditableListBox x:Name="AbilitiesListBox" SelectedIndex="1" ItemsSource="{Binding Abilities}" SelectedItem="{Binding SelectedAbility, Mode=TwoWay}" ItemTemplate="{StaticResource BasicNameItemTemplate}" Margin="3" NewItem="NewAbility" />
+                    <c:EditableListBox x:Name="AbilitiesListBox" SelectedIndex="1" ItemsSource="{Binding Abilities}" SelectedItem="{Binding SelectedAbility, Mode=TwoWay}" ItemTemplate="{StaticResource BasicNameItemTemplate}" Margin="3"
+                                       Add="{Binding AddAbilityCommand}" Remove="{Binding RemoveAbilityCommand}" />
                     <local:AbilityView IsEnabled="{Binding SelectedItems.Count, ElementName=AbilitiesListBox}" Grid.Column="1" DataContext="{Binding SelectedAbility, Mode=OneWay}" />
                 </Grid>
             </TabItem>
@@ -72,7 +75,8 @@
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <c:EditableListBox x:Name="ContestEffectsListBox" ItemsSource="{Binding ContestEffects}" SelectedItem="{Binding SelectedContestEffect, Mode=TwoWay}" ItemTemplate="{StaticResource BasicNameItemTemplate}" Margin="3" NewItem="NewContestEffect" />
+                    <c:EditableListBox x:Name="ContestEffectsListBox" ItemsSource="{Binding ContestEffects}" SelectedItem="{Binding SelectedContestEffect, Mode=TwoWay}" ItemTemplate="{StaticResource BasicNameItemTemplate}" Margin="3"
+                                       Add="{Binding AddContestEffectCommand}" Remove="{Binding RemoveContestEffectCommand}" />
                     <local:ContestEffectView IsEnabled="{Binding SelectedItems.Count, ElementName=ContestEffectsListBox}" Grid.Column="1" DataContext="{Binding SelectedContestEffect, Mode=OneWay}" />
                 </Grid>
             </TabItem>

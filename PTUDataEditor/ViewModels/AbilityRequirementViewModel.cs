@@ -8,7 +8,7 @@ public partial class AbilityRequirementViewModel : ObservableObject
     public AbilityRequirement BuildModel(IReadOnlyList<Ability> allAbilities) => new()
     {
         RequirementType = RequirementType,
-        Ability = allAbilities.First(a => a.Name == Ability.Name), // TODO: Ensure that removing abilities from the full list also removes them per-form.
+        Ability = allAbilities.First(a => a.Name == Ability.Name),
     };
 
     public AbilityRequirementViewModel(AbilityRequirement model, IReadOnlyList<AbilityViewModel> allAbilities)

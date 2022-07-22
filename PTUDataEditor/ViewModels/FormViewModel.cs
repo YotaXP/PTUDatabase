@@ -8,22 +8,26 @@ namespace PTUDataEditor.ViewModels;
 
 public partial class FormViewModel : ObservableObject
 {
-    public Form BuildModel(IReadOnlyList<Move> allMoves, IReadOnlyList<Ability> allAbilities) => new()
+    public Form BuildModel(IReadOnlyList<Move> allMoves, IReadOnlyList<Ability> allAbilities)
     {
-        Name = Name,
-        ImageUrl = ImageUrl == "" ? null : ImageUrl,
-        BaseStats = BaseStats,
-        Types = Types,
-        Abilities = Abilities.Select(avm => avm.BuildModel(allAbilities)).ToList(),
-        Moves = Moves.Select(mvm => mvm.BuildModel(allMoves)).ToList(),
-        BaseSkills = BaseSkills,
-        Capabilities = Capabilities,
-        AverageSize = (AverageSizeMeters, AverageSizeInches, SizeClass),
-        AverageWeight = (AverageWeightKilograms, 0f, 0),
-        MaleFemaleRatio = HasGender ? MaleFemaleRatio : null,
-        EggGroups = EggGroups,
-        SelectionWeight = SelectionWeight,
-    };
+        SortMovesAndAbilities();
+        return new()
+        {
+            Name = Name,
+            ImageUrl = ImageUrl == "" ? null : ImageUrl,
+            BaseStats = BaseStats,
+            Types = Types,
+            Abilities = Abilities.Select(avm => avm.BuildModel(allAbilities)).ToList(),
+            Moves = Moves.Select(mvm => mvm.BuildModel(allMoves)).ToList(),
+            BaseSkills = BaseSkills,
+            Capabilities = Capabilities,
+            AverageSize = (AverageSizeMeters, AverageSizeInches, SizeClass),
+            AverageWeight = (AverageWeightKilograms, 0f, 0),
+            MaleFemaleRatio = HasGender ? MaleFemaleRatio : null,
+            EggGroups = EggGroups,
+            SelectionWeight = SelectionWeight,
+        };
+    }
 
     public FormViewModel(Form model, DatabaseViewModel db)
     {
@@ -105,10 +109,32 @@ public partial class FormViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private void RemoveMove(MoveRequirementViewModel move)
+    {
+        var force = (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Shift) != 0;
+        var result = force ? System.Windows.MessageBoxResult.Yes : System.Windows.MessageBox.Show(
+            $"Are you sure you would like to remove {move.Move.Name}?", "Remove Form Move",
+            System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning, System.Windows.MessageBoxResult.No);
+        if (result == System.Windows.MessageBoxResult.Yes)
+            Moves.Remove(move);
+    }
+
+    [RelayCommand]
     private void AddAbility()
     {
         if (rootDB.Abilities.Count == 0) return;
         Abilities.Add(new AbilityRequirementViewModel(rootDB.Abilities[0]));
+    }
+
+    [RelayCommand]
+    private void RemoveAbility(AbilityRequirementViewModel ability)
+    {
+        var force = (System.Windows.Input.Keyboard.Modifiers & System.Windows.Input.ModifierKeys.Shift) != 0;
+        var result = force ? System.Windows.MessageBoxResult.Yes : System.Windows.MessageBox.Show(
+            $"Are you sure you would like to remove {ability.Ability.Name}?", "Remove Form Ability",
+            System.Windows.MessageBoxButton.YesNo, System.Windows.MessageBoxImage.Warning, System.Windows.MessageBoxResult.No);
+        if (result == System.Windows.MessageBoxResult.Yes)
+            Abilities.Remove(ability);
     }
 
     private void SortMovesAndAbilities()

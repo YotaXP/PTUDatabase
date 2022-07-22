@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace PTUDataEditor.Controls;
 
@@ -13,6 +14,29 @@ public partial class EditableListBox : ListBox
     {
         InitializeComponent();
     }
+
+
+
+
+    public ICommand Add
+    {
+        get { return (ICommand)GetValue(AddProperty); }
+        set { SetValue(AddProperty, value); }
+    }
+
+    public static readonly DependencyProperty AddProperty = DependencyProperty.Register("Add", typeof(ICommand), typeof(EditableListBox));
+
+
+    public ICommand Remove
+    {
+        get { return (ICommand)GetValue(RemoveProperty); }
+        set { SetValue(RemoveProperty, value); }
+    }
+
+    public static readonly DependencyProperty RemoveProperty = DependencyProperty.Register("Remove", typeof(ICommand), typeof(EditableListBox));
+
+
+
 
     private void RemoveBtn_Click(object sender, RoutedEventArgs e)
     {
