@@ -2,7 +2,7 @@
 
 namespace PTUDatabase;
 
-public record Skills : IEnumerable<(string Name, int Rank, int Bonus)>
+public record Skills
 {
     // Body Skills
     public (int Rank, int Bonus) Intimidate { get; init; }
@@ -47,7 +47,7 @@ public record Skills : IEnumerable<(string Name, int Rank, int Bonus)>
         Intuition = (1, 0),
     };
 
-    public IEnumerator<(string Name, int Rank, int Bonus)> GetEnumerator()
+    public IEnumerable<(string Name, int Rank, int Bonus)> AsEnumerable()
     {
         yield return ("Athletics", Athletics.Rank, Athletics.Bonus);
         yield return ("Acrobatics", Acrobatics.Rank, Acrobatics.Bonus);
@@ -67,7 +67,5 @@ public record Skills : IEnumerable<(string Name, int Rank, int Bonus)>
         yield return ("Command", Command.Rank, Command.Bonus);
         yield return ("Intuition", Intuition.Rank, Intuition.Bonus);
     }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 

@@ -18,6 +18,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <tc:BoolConverter x:Key="MoveRequirementColumnWidth" True="1" False="2" />
         <tc:EnumToItemSourceConverter x:Key="EnumToItemSource" />
+        <tc:TypeToImageSourceConverter x:Key="TypeToImageSource" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -63,7 +64,22 @@
         <tk:IntegerUpDown Value="{Binding SelectedForm.SelectionWeight, Mode=TwoWay}" Minimum="0" Grid.Row="3" Grid.Column="5" Margin="3" />
 
         <Label Content="Types:" Grid.Row="4" Grid.Column="2" />
-        <ToggleButton x:Name="TypesBtn" IsChecked="{Binding IsOpen, ElementName=TypesPopup}" Content="None" Grid.Row="4" Grid.Column="3" Margin="3" />
+        <ToggleButton x:Name="TypesBtn" IsChecked="{Binding IsOpen, ElementName=TypesPopup}" Grid.Row="4" Grid.Column="3" Margin="3">
+            <ToggleButton.Content>
+                <ItemsControl ItemsSource="{Binding SelectedForm.Types}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Converter={StaticResource TypeToImageSource}}" MaxHeight="16" Margin="1 0" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ToggleButton.Content>
+        </ToggleButton>
         <Popup x:Name="TypesPopup" PlacementTarget="{Binding ElementName=TypesBtn}" Placement="Bottom" StaysOpen="False">
             <c:EnumListView x:Name="TypesList" EnumType="{x:Type ptu:PokemonType}" SelectionChanged="TypesChanged" />
         </Popup>
@@ -106,7 +122,7 @@
             <Grid>
                 <tk:SingleUpDown Width="60" Value="{Binding SelectedForm.MaleFemaleRatio}" Visibility="{Binding SelectedForm.HasGender, Converter={StaticResource BoolToVis}}"
                                  Minimum="0" Maximum="1" Increment="0.05" FormatString="0.#%" Margin="3" />
-                <Label Visibility="{Binding SelectedForm.HasGender, Converter={StaticResource BoolToVisInverse}}" Content="Genderless" />
+                <Label Visibility="{Binding SelectedForm.HasGender, Converter={StaticResource BoolToVisInverse}, FallbackValue=Hidden}" Content="Genderless" />
             </Grid>
         </StackPanel>
 

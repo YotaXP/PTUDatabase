@@ -24,10 +24,10 @@ public partial class DatabaseViewModel : ObservableObject
 
     public DatabaseViewModel(Database model)
     {
-        _ContestEffects = new(model.ContestEffects.Select(ce => new ContestEffectViewModel(ce)));
-        _Abilities = new(model.Abilities.Select(a => new AbilityViewModel(a)));
-        _Moves = new(model.Moves.Select(m => new MoveViewModel(m, this)));
-        _Species = new(model.Species.Select(s => new SpeciesViewModel(s, this)));
+        _ContestEffects = new(model.ContestEffects.Select(ce => new ContestEffectViewModel(ce)).OrderBy(m => m.Name));
+        _Abilities = new(model.Abilities.Select(a => new AbilityViewModel(a)).OrderBy(m => m.Name));
+        _Moves = new(model.Moves.Select(m => new MoveViewModel(m, this)).OrderBy(m => m.Name));
+        _Species = new(model.Species.Select(s => new SpeciesViewModel(s, this)).OrderBy(m => m.Name));
     }
 
     [RelayCommand]

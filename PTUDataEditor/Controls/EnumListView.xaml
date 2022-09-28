@@ -3,10 +3,13 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+          xmlns:tc="clr-namespace:PTUDataEditor.TypeConverters"
+          xmlns:ptu="clr-namespace:PTUDatabase;assembly=PTUDatabase"
           mc:Ignorable="d" 
           SelectionMode="Multiple"
           d:DesignHeight="450" d:DesignWidth="200">
     <ListBox.Resources>
+        <tc:TypeToImageSourceConverter x:Key="TypeToImageSource" />
         <Style TargetType="ListBoxItem">
             <Setter Property="OverridesDefaultStyle" Value="true" />
             <Setter Property="SnapsToDevicePixels" Value="true" />
@@ -14,7 +17,13 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
                         <CheckBox Margin="5,2" IsChecked="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
-                            <ContentPresenter />
+                            <ContentPresenter>
+                                <ContentPresenter.Resources>
+                                    <DataTemplate DataType="{x:Type ptu:PokemonType}">
+                                        <Image Source="{Binding Converter={StaticResource TypeToImageSource}}" MaxHeight="16" />
+                                    </DataTemplate>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </CheckBox>
                     </ControlTemplate>
                 </Setter.Value>

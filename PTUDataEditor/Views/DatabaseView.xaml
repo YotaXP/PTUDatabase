@@ -6,8 +6,6 @@
              xmlns:local="clr-namespace:PTUDataEditor.Views"
              xmlns:c="clr-namespace:PTUDataEditor.Controls"
              xmlns:vm="clr-namespace:PTUDataEditor.ViewModels"
-             xmlns:tk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:ptu="clr-namespace:PTUDatabase;assembly=PTUDatabase"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1100"
              d:DataContext="{x:Static vm:DatabaseViewModel.DesignData}">

@@ -17,8 +17,8 @@ public partial class SpeciesView : UserControl
     private void TypesChanged(object sender, SelectionChangedEventArgs e)
     {
         var types = TypesList.SelectedItems.Cast<PTUDatabase.PokemonType>();
-        var content = string.Join(", ", types);
-        TypesBtn.Content = content == "" ? "None" : content;
+        //var content = string.Join(", ", types);
+        //TypesBtn.Content = content == "" ? "None" : content;
 
         var form = FormsListBox.SelectedItem as FormViewModel;
         if (!suppressChanged && form is not null)
@@ -65,4 +65,5 @@ public partial class SpeciesView : UserControl
             suppressChanged = false;
         }
     }
+
 }

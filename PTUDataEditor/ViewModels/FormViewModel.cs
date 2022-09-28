@@ -76,7 +76,7 @@ public partial class FormViewModel : ObservableObject
         if (string.IsNullOrEmpty(ImageUrl)) issues.Add("Missing image.");
         if (BaseStats == Stats.Zero) issues.Add("Missing base stats.");
         if (BaseSkills == Skills.Zero) issues.Add("Missing base skills.");
-        if (BaseSkills.Any(s => s.Rank < 1)) issues.Add("Some base skills are below the minimum of 1.");
+        if (BaseSkills.AsEnumerable().Any(s => s.Rank < 1)) issues.Add("Some base skills are below the minimum of 1.");
         // TODO: Validate capabilities
         if (Moves?.Count is null or 0) issues.Add("Missing moves.");
         if (Abilities?.Count is null or 0) issues.Add("Missing abilities.");
