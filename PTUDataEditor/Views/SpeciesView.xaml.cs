@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 using PTUDataEditor.ViewModels;
 
 namespace PTUDataEditor.Views;
@@ -11,6 +12,31 @@ public partial class SpeciesView : UserControl
     {
         InitializeComponent();
     }
+
+
+
+    public bool EditingMoves
+    {
+        get { return (bool)GetValue(EditingMovesProperty); }
+        set { SetValue(EditingMovesProperty, value); }
+    }
+
+    public static readonly DependencyProperty EditingMovesProperty =
+        DependencyProperty.Register("EditingMoves", typeof(bool), typeof(SpeciesView), new PropertyMetadata(false));
+
+
+
+    public bool EditingAbilities
+    {
+        get { return (bool)GetValue(EditingAbilitiesProperty); }
+        set { SetValue(EditingAbilitiesProperty, value); }
+    }
+
+    public static readonly DependencyProperty EditingAbilitiesProperty =
+        DependencyProperty.Register("EditingAbilities", typeof(bool), typeof(SpeciesView), new PropertyMetadata(false));
+
+
+
 
     private bool suppressChanged = false;
 
@@ -66,4 +92,13 @@ public partial class SpeciesView : UserControl
         }
     }
 
+    private void EnableEditingMoves(object sender, RoutedEventArgs e)
+    {
+        EditingMoves = true;
+    }
+
+    private void EnableEditingAbilities(object sender, RoutedEventArgs e)
+    {
+        EditingAbilities = true;
+    }
 }

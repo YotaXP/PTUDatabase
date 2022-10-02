@@ -15,7 +15,7 @@ public partial class FormViewModel : ObservableObject
         {
             Name = Name,
             ImageUrl = ImageUrl == "" ? null : ImageUrl,
-            BaseStats = BaseStats,
+            BaseStats = BaseStats.BuildModel(),
             Types = Types,
             Abilities = Abilities.Select(avm => avm.BuildModel(allAbilities)).ToList(),
             Moves = Moves.Select(mvm => mvm.BuildModel(allMoves)).ToList(),
@@ -33,7 +33,7 @@ public partial class FormViewModel : ObservableObject
     {
         _Name = model.Name;
         _ImageUrl = model.ImageUrl ?? "";
-        _BaseStats = model.BaseStats;
+        _BaseStats = new(model.BaseStats);
         _Types = new(model.Types);
         _Abilities = new(model.Abilities.Select(ability => new AbilityRequirementViewModel(ability, db.Abilities)));
         _Moves = new(model.Moves.Select(move => new MoveRequirementViewModel(move, db.Moves)));
@@ -74,7 +74,7 @@ public partial class FormViewModel : ObservableObject
         if (AverageWeightKilograms == 0) issues.Add("Missing weight.");
         if (AverageSizeMeters == 0) issues.Add("Missing size.");
         if (string.IsNullOrEmpty(ImageUrl)) issues.Add("Missing image.");
-        if (BaseStats == Stats.Zero) issues.Add("Missing base stats.");
+        if (BaseStats.Total == 0) issues.Add("Missing base stats.");
         if (BaseSkills == Skills.Zero) issues.Add("Missing base skills.");
         if (BaseSkills.AsEnumerable().Any(s => s.Rank < 1)) issues.Add("Some base skills are below the minimum of 1.");
         // TODO: Validate capabilities
@@ -90,7 +90,7 @@ public partial class FormViewModel : ObservableObject
     private string _ImageUrl;
 
     [ObservableProperty]
-    private Stats _BaseStats;
+    private StatsViewModel _BaseStats;
 
     [ObservableProperty]
     private ObservableCollection<PokemonType> _Types;

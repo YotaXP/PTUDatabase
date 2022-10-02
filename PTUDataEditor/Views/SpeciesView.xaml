@@ -10,15 +10,18 @@
              xmlns:tc="clr-namespace:PTUDataEditor.TypeConverters"
              xmlns:vm="clr-namespace:PTUDataEditor.ViewModels"
              mc:Ignorable="d" d:Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
-             d:DesignHeight="450" d:DesignWidth="1000">
+             d:DesignHeight="650" d:DesignWidth="1000">
     <UserControl.Resources>
         <DataTemplate x:Key="BasicNameItemTemplate">
             <TextBlock Text="{Binding Name}" />
         </DataTemplate>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <tc:BoolConverter x:Key="MoveRequirementColumnWidth" True="1" False="2" />
+        <tc:BoolConverter x:Key="CollapsedIfTrue" True="{x:Static Visibility.Collapsed}" False="{x:Static Visibility.Visible}" />
+        <tc:BoolConverter x:Key="CollapsedIfFalse" True="{x:Static Visibility.Visible}" False="{x:Static Visibility.Collapsed}" />
         <tc:EnumToItemSourceConverter x:Key="EnumToItemSource" />
         <tc:TypeToImageSourceConverter x:Key="TypeToImageSource" />
+        <tc:NullImageConverter x:Key="NullImageConverter" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -126,11 +129,54 @@
             </Grid>
         </StackPanel>
 
-        <Label Content="Base Stats:" Grid.Row="6" Grid.Column="0" />
+        <GroupBox Header="Base Stats:" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="3">
+            <Grid HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="70"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="HP:" Grid.Row="0" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="0" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.HP}" Minimum="1" />
 
-        <Label Content="Skills:" Grid.Row="6" Grid.Column="2" />
+                <Label Content="Physical Attack:" Grid.Row="1" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.PhysicalAttack}" Minimum="1" />
 
-        <Label Content="Capabilities:" Grid.Row="6" Grid.Column="4" />
+                <Label Content="Special Attack:" Grid.Row="2" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="2" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.SpecialAttack}" Minimum="1" />
+
+                <Label Content="Physical Defense:" Grid.Row="3" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="3" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.PhysicalDefense}" Minimum="1" />
+
+                <Label Content="Special Defense:" Grid.Row="4" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="4" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.SpecialDefense}" Minimum="1" />
+
+                <Label Content="Speed:" Grid.Row="5" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="5" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.Speed}" Minimum="1" />
+
+                <Separator Grid.Row="6" Grid.ColumnSpan="2" />
+
+                <Label Content="Base Stat Total:" Grid.Row="7" />
+                <Label Content="{Binding SelectedForm.BaseStats.Total}" Grid.Row="7" Grid.Column="1" />
+            </Grid>
+        </GroupBox>
+
+        <GroupBox Header="Skills:" Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2">
+            
+        </GroupBox>
+
+        <GroupBox Header="Capabilities:" Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="2">
+            
+        </GroupBox>
 
         <GroupBox Style="{DynamicResource GroupBoxFullWidthHeader}" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Margin="3">
             <GroupBox.Header>
@@ -139,88 +185,108 @@
                     <TextBox Text="{Binding SelectedForm.ImageUrl, Mode=TwoWay}" Margin="0 3" />
                 </DockPanel>
             </GroupBox.Header>
-            <Image Source="{Binding SelectedForm.ImageUrl}" />
+            <Image Source="{Binding SelectedForm.ImageUrl, Converter={StaticResource NullImageConverter}}" />
         </GroupBox>
 
-        <GroupBox Header="Moves:" Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" Margin="3">
-            <DockPanel>
-                <Button DockPanel.Dock="Bottom" Content="Add Move" Command="{Binding SelectedForm.AddMoveCommand}" Margin="3" />
-                <ItemsControl Margin="3" ItemsSource="{Binding SelectedForm.Moves, Mode=OneWay}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0,0,0,-1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="80" />
-                                    <ColumnDefinition Width="50" />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="20" />
-                                </Grid.ColumnDefinitions>
+        <GroupBox Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" Margin="3">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Moves:</TextBlock>
+                    <Button Margin="10 0 0 0" Padding="5 0" Content="Show" Click="EnableEditingMoves" Visibility="{Binding EditingMoves, ElementName=Root, Converter={StaticResource CollapsedIfTrue}}" />
+                </StackPanel>
+            </GroupBox.Header>
+            <Grid>
+                <Label Margin="3" Content="Hidden for performance." Visibility="{Binding EditingMoves, ElementName=Root, Converter={StaticResource CollapsedIfTrue}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-                                <TextBox Grid.Column="1" Text="{Binding MachineId}" Visibility="{Binding ShowMachineBox, Converter={StaticResource BoolToVis}}" />
-                                <tk:IntegerUpDown Grid.Column="1" Value="{Binding RequiredLevel}" Minimum="1" Visibility="{Binding ShowLevelBox, Converter={StaticResource BoolToVis}}" />
-                                <ComboBox ItemsSource="{tc:Enum {x:Type ptu:MoveRequirementType}}" SelectedValuePath="Value" DisplayMemberPath="Description"
-                                          SelectedValue="{Binding RequirementType}" Grid.ColumnSpan="{Binding ShowEitherBox, Converter={StaticResource MoveRequirementColumnWidth}}" />
+                <DockPanel Visibility="{Binding EditingMoves, ElementName=Root, Converter={StaticResource CollapsedIfFalse}}">
+                    <Button DockPanel.Dock="Bottom" Content="Add Move" Command="{Binding SelectedForm.AddMoveCommand}" Margin="3" />
+                    <ItemsControl Margin="3" ItemsSource="{Binding SelectedForm.Moves, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,-1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80" />
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="20" />
+                                    </Grid.ColumnDefinitions>
 
-                                <ComboBox ItemsSource="{Binding DataContext.RootDB.Moves, RelativeSource={RelativeSource AncestorType=local:SpeciesView}}" SelectedItem="{Binding Move}" DisplayMemberPath="Name" Grid.Column="2" />
+                                    <TextBox Grid.Column="1" Text="{Binding MachineId}" Visibility="{Binding ShowMachineBox, Converter={StaticResource BoolToVis}}" />
+                                    <tk:IntegerUpDown Grid.Column="1" Value="{Binding RequiredLevel}" Minimum="1" Visibility="{Binding ShowLevelBox, Converter={StaticResource BoolToVis}}" />
+                                    <ComboBox ItemsSource="{tc:Enum {x:Type ptu:MoveRequirementType}}" SelectedValuePath="Value" DisplayMemberPath="Description"
+                                              SelectedValue="{Binding RequirementType}" Grid.ColumnSpan="{Binding ShowEitherBox, Converter={StaticResource MoveRequirementColumnWidth}}" />
 
-                                <Button Grid.Column="3" FontSize="10" Command="{Binding DataContext.SelectedForm.RemoveMoveCommand, RelativeSource={RelativeSource AncestorType=local:SpeciesView}}" CommandParameter="{Binding}">✖</Button>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+                                    <ComboBox ItemsSource="{Binding DataContext.RootDB.Moves, RelativeSource={RelativeSource AncestorType=local:SpeciesView}}" SelectedItem="{Binding Move}" DisplayMemberPath="Name" Grid.Column="2" />
 
-                    <ItemsControl.Template>
-                        <ControlTemplate TargetType="ItemsControl">
-                            <ScrollViewer CanContentScroll="True" Padding="{TemplateBinding Padding}" Focusable="False">
-                                <ItemsPresenter />
-                            </ScrollViewer>
-                        </ControlTemplate>
-                    </ItemsControl.Template>
-                </ItemsControl>
-            </DockPanel>
+                                    <Button Grid.Column="3" FontSize="10" Command="{Binding DataContext.SelectedForm.RemoveMoveCommand, RelativeSource={RelativeSource AncestorType=local:SpeciesView}}" CommandParameter="{Binding}">✖</Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.Template>
+                            <ControlTemplate TargetType="ItemsControl">
+                                <ScrollViewer CanContentScroll="True" Padding="{TemplateBinding Padding}" Focusable="False">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                    </ItemsControl>
+                </DockPanel>
+            </Grid>
         </GroupBox>
 
-        <GroupBox Header="Abilities:" Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="2" Margin="3">
-            <DockPanel>
-                <Button DockPanel.Dock="Bottom" Content="Add Ability" Command="{Binding SelectedForm.AddAbilityCommand}" Margin="3" />
-                <ItemsControl Margin="3" ItemsSource="{Binding SelectedForm.Abilities, Mode=OneWay}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0,0,0,-1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="80" />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="20" />
-                                </Grid.ColumnDefinitions>
+        <GroupBox Grid.Row="7" Grid.Column="4" Grid.ColumnSpan="2" Margin="3">
+            <GroupBox.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>Abilities:</TextBlock>
+                    <Button Margin="10 0 0 0" Padding="5 0" Content="Show" Click="EnableEditingAbilities" Visibility="{Binding EditingAbilities, ElementName=Root, Converter={StaticResource CollapsedIfTrue}}" />
+                </StackPanel>
+            </GroupBox.Header>
+            <Grid>
+                <Label Margin="3" Content="Hidden for performance." Visibility="{Binding EditingAbilities, ElementName=Root, Converter={StaticResource CollapsedIfTrue}}" HorizontalAlignment="Center" VerticalAlignment="Center" />
 
-                                <ComboBox ItemsSource="{tc:Enum {x:Type ptu:AbilityRequirementType}}" SelectedValuePath="Value" DisplayMemberPath="Description"
+                <DockPanel Visibility="{Binding EditingAbilities, ElementName=Root, Converter={StaticResource CollapsedIfFalse}}">
+                    <Button DockPanel.Dock="Bottom" Content="Add Ability" Command="{Binding SelectedForm.AddAbilityCommand}" Margin="3" />
+                    <ItemsControl Margin="3" ItemsSource="{Binding SelectedForm.Abilities, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,-1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="20" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ComboBox ItemsSource="{tc:Enum {x:Type ptu:AbilityRequirementType}}" SelectedValuePath="Value" DisplayMemberPath="Description"
                                           SelectedValue="{Binding RequirementType}" />
 
-                                <ComboBox ItemsSource="{Binding DataContext.RootDB.Abilities, RelativeSource={RelativeSource AncestorType=local:SpeciesView}}" SelectedItem="{Binding Ability}" DisplayMemberPath="Name" Grid.Column="1" />
+                                    <ComboBox ItemsSource="{Binding DataContext.RootDB.Abilities, RelativeSource={RelativeSource AncestorType=local:SpeciesView}}" SelectedItem="{Binding Ability}" DisplayMemberPath="Name" Grid.Column="1" />
 
-                                <Button Grid.Column="2" FontSize="10" Command="{Binding DataContext.SelectedForm.RemoveAbilityCommand, RelativeSource={RelativeSource AncestorType=local:SpeciesView}}" CommandParameter="{Binding}">✖</Button>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
+                                    <Button Grid.Column="2" FontSize="10" Command="{Binding DataContext.SelectedForm.RemoveAbilityCommand, RelativeSource={RelativeSource AncestorType=local:SpeciesView}}" CommandParameter="{Binding}">✖</Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel IsVirtualizing="True" VirtualizationMode="Recycling" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
 
-                    <ItemsControl.Template>
-                        <ControlTemplate TargetType="ItemsControl">
-                            <ScrollViewer CanContentScroll="True" Padding="{TemplateBinding Padding}" Focusable="False">
-                                <ItemsPresenter />
-                            </ScrollViewer>
-                        </ControlTemplate>
-                    </ItemsControl.Template>
-                </ItemsControl>
-            </DockPanel>
+                        <ItemsControl.Template>
+                            <ControlTemplate TargetType="ItemsControl">
+                                <ScrollViewer CanContentScroll="True" Padding="{TemplateBinding Padding}" Focusable="False">
+                                    <ItemsPresenter />
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ItemsControl.Template>
+                    </ItemsControl>
+                </DockPanel>
+            </Grid>
         </GroupBox>
 
         <ItemsControl ItemsSource="{Binding SelectedForm.ValidationIssues}" VerticalAlignment="Bottom" HorizontalAlignment="Left" Grid.ColumnSpan="99" Grid.RowSpan="99" Margin="9" Foreground="Red" IsHitTestVisible="False" />

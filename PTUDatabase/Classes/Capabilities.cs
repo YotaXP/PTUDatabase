@@ -32,7 +32,7 @@ public record Capabilities
         if (Levitate > 0)
             sb.Append(", Levitate ").Append(Levitate);
         if (Burrow > 0)
-            sb.Append(", Overland ").Append(Burrow);
+            sb.Append(", Burrow ").Append(Burrow);
         if (Teleporter > 0)
             sb.Append(", Teleporter ").Append(Teleporter);
         if (HighJump > 0 || LongJump > 0)
