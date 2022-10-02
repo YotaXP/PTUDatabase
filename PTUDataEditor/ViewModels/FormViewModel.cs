@@ -20,7 +20,7 @@ public partial class FormViewModel : ObservableObject
             Abilities = Abilities.Select(avm => avm.BuildModel(allAbilities)).ToList(),
             Moves = Moves.Select(mvm => mvm.BuildModel(allMoves)).ToList(),
             BaseSkills = BaseSkills,
-            Capabilities = Capabilities,
+            Capabilities = Capabilities.BuildModel(),
             AverageSize = (AverageSizeMeters, AverageSizeInches, SizeClass),
             AverageWeight = (AverageWeightKilograms, 0f, 0),
             MaleFemaleRatio = HasGender ? MaleFemaleRatio : null,
@@ -38,7 +38,7 @@ public partial class FormViewModel : ObservableObject
         _Abilities = new(model.Abilities.Select(ability => new AbilityRequirementViewModel(ability, db.Abilities)));
         _Moves = new(model.Moves.Select(move => new MoveRequirementViewModel(move, db.Moves)));
         _BaseSkills = model.BaseSkills;
-        _Capabilities = model.Capabilities;
+        _Capabilities = new(model.Capabilities);
         _AverageSizeMeters = model.AverageSize.Meters;
         _SizeClass = model.AverageSize.Class;
         _AverageWeightKilograms = model.AverageWeight.Kilograms;
@@ -162,7 +162,7 @@ public partial class FormViewModel : ObservableObject
     private Skills _BaseSkills = Skills.Minimum;
 
     [ObservableProperty]
-    private Capabilities _Capabilities = Capabilities.None;
+    private CapabilitiesViewModel _Capabilities;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AverageSizeInches))]

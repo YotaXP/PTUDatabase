@@ -129,7 +129,7 @@
             </Grid>
         </StackPanel>
 
-        <GroupBox Header="Base Stats:" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="3">
+        <GroupBox Header="Base Stats:" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" DataContext="{Binding SelectedForm.BaseStats}">
             <Grid HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -146,36 +146,100 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Label Content="HP:" Grid.Row="0" />
-                <tk:IntegerUpDown Margin="3" Grid.Row="0" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.HP}" Minimum="1" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="0" Grid.Column="1" Value="{Binding HP}" Minimum="1" />
 
                 <Label Content="Physical Attack:" Grid.Row="1" />
-                <tk:IntegerUpDown Margin="3" Grid.Row="1" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.PhysicalAttack}" Minimum="1" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="1" Grid.Column="1" Value="{Binding PhysicalAttack}" Minimum="1" />
 
                 <Label Content="Special Attack:" Grid.Row="2" />
-                <tk:IntegerUpDown Margin="3" Grid.Row="2" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.SpecialAttack}" Minimum="1" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="2" Grid.Column="1" Value="{Binding SpecialAttack}" Minimum="1" />
 
                 <Label Content="Physical Defense:" Grid.Row="3" />
-                <tk:IntegerUpDown Margin="3" Grid.Row="3" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.PhysicalDefense}" Minimum="1" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="3" Grid.Column="1" Value="{Binding PhysicalDefense}" Minimum="1" />
 
                 <Label Content="Special Defense:" Grid.Row="4" />
-                <tk:IntegerUpDown Margin="3" Grid.Row="4" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.SpecialDefense}" Minimum="1" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="4" Grid.Column="1" Value="{Binding SpecialDefense}" Minimum="1" />
 
                 <Label Content="Speed:" Grid.Row="5" />
-                <tk:IntegerUpDown Margin="3" Grid.Row="5" Grid.Column="1" Value="{Binding SelectedForm.BaseStats.Speed}" Minimum="1" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="5" Grid.Column="1" Value="{Binding Speed}" Minimum="1" />
 
                 <Separator Grid.Row="6" Grid.ColumnSpan="2" />
 
                 <Label Content="Base Stat Total:" Grid.Row="7" />
-                <Label Content="{Binding SelectedForm.BaseStats.Total}" Grid.Row="7" Grid.Column="1" />
+                <Label Content="{Binding Total}" Grid.Row="7" Grid.Column="1" />
             </Grid>
         </GroupBox>
 
-        <GroupBox Header="Skills:" Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2">
+        <GroupBox Header="Skills:" Margin="3" Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2">
             
         </GroupBox>
 
-        <GroupBox Header="Capabilities:" Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="2">
-            
+        <GroupBox Header="Capabilities:" Margin="3" Grid.Row="6" Grid.Column="4" Grid.ColumnSpan="2" DataContext="{Binding SelectedForm.Capabilities}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Label Content="Overland:" Grid.Row="0" Grid.Column="0" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="0" Grid.Column="1" Value="{Binding Overland}" Minimum="0" />
+
+                <Label Content="Swim:" Grid.Row="0" Grid.Column="2" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="0" Grid.Column="3" Value="{Binding Swim}" Minimum="0" />
+
+
+                <Label Content="Sky:" Grid.Row="1" Grid.Column="0" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="1" Grid.Column="1" Value="{Binding Sky}" Minimum="0" />
+
+                <Label Content="Levitate:" Grid.Row="1" Grid.Column="2" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="1" Grid.Column="3" Value="{Binding Levitate}" Minimum="0" />
+
+
+                <Label Content="Burrow:" Grid.Row="2" Grid.Column="0" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="2" Grid.Column="1" Value="{Binding Burrow}" Minimum="0" />
+
+                <Label Content="Teleporter:" Grid.Row="2" Grid.Column="2" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="2" Grid.Column="3" Value="{Binding Teleporter}" Minimum="0" />
+
+
+                <Label Content="High Jump:" Grid.Row="3" Grid.Column="0" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="3" Grid.Column="1" Value="{Binding HighJump}" Minimum="0" />
+
+                <Label Content="Long Jump:" Grid.Row="3" Grid.Column="2" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="3" Grid.Column="3" Value="{Binding LongJump}" Minimum="0" />
+
+
+                <Label Content="Power:" Grid.Row="4" Grid.Column="0" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="4" Grid.Column="1" Value="{Binding Power}" Minimum="0" />
+
+                <Label Content="Mountable:" Grid.Row="4" Grid.Column="2" />
+                <tk:IntegerUpDown Margin="3" Grid.Row="4" Grid.Column="3" Value="{Binding Mountable}" Minimum="0" />
+
+
+                <Label Content="Naturewalk:" Grid.Row="5" Grid.Column="0" />
+                <ToggleButton x:Name="NaturewalkBtn" IsChecked="{Binding IsOpen, ElementName=NaturewalkPopup}" Content="None" Margin="3" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" />
+                <Popup x:Name="NaturewalkPopup" PlacementTarget="{Binding ElementName=NaturewalkBtn}" Placement="Bottom" StaysOpen="False">
+                    <c:EnumListView x:Name="NaturewalkList" EnumType="{x:Type ptu:TerrainType}" SelectionChanged="NaturewalkChanged" />
+                </Popup>
+
+                <Label Content="Others:" Grid.Row="6" Grid.Column="0" />
+                <ToggleButton x:Name="OtherCapsBtn" IsChecked="{Binding IsOpen, ElementName=OtherCapsPopup}" Content="None" Margin="3" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" />
+                <Popup x:Name="OtherCapsPopup" PlacementTarget="{Binding ElementName=OtherCapsBtn}" Placement="Bottom" StaysOpen="False">
+                    <c:EnumListView x:Name="OtherCapsList" EnumType="{x:Type ptu:OtherCapability}" SelectionChanged="OtherCapsChanged" />
+                </Popup>
+
+            </Grid>
         </GroupBox>
 
         <GroupBox Style="{DynamicResource GroupBoxFullWidthHeader}" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Margin="3">

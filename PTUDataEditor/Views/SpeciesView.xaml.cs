@@ -78,12 +78,18 @@ public partial class SpeciesView : UserControl
         {
             TypesList.SelectedItems.Clear();
             EggGroupsList.SelectedItems.Clear();
+            NaturewalkList.SelectedItems.Clear();
+            OtherCapsList.SelectedItems.Clear();
             if (form is not null)
             {
                 foreach (var type in form.Types)
                     TypesList.SelectedItems.Add(type);
                 foreach (var group in form.EggGroups)
                     EggGroupsList.SelectedItems.Add(group);
+                foreach (var terrain in form.Capabilities.NaturewalkTypes)
+                    NaturewalkList.SelectedItems.Add(terrain);
+                foreach (var cap in form.Capabilities.Others)
+                    OtherCapsList.SelectedItems.Add(cap);
             }
         }
         finally
@@ -100,5 +106,35 @@ public partial class SpeciesView : UserControl
     private void EnableEditingAbilities(object sender, RoutedEventArgs e)
     {
         EditingAbilities = true;
+    }
+
+    private void NaturewalkChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var terrains = NaturewalkList.SelectedItems.Cast<PTUDatabase.TerrainType>();
+        var content = string.Join(", ", terrains);
+        NaturewalkBtn.Content = content == "" ? "None" : content;
+
+        var form = FormsListBox.SelectedItem as FormViewModel;
+        if (!suppressChanged && form is not null)
+        {
+            form.Capabilities.NaturewalkTypes.Clear();
+            foreach (var terrain in terrains)
+                form.Capabilities.NaturewalkTypes.Add(terrain);
+        }
+    }
+
+    private void OtherCapsChanged(object sender, SelectionChangedEventArgs e)
+    {
+        var caps = OtherCapsList.SelectedItems.Cast<PTUDatabase.OtherCapability>();
+        var content = string.Join(", ", caps);
+        OtherCapsBtn.Content = content == "" ? "None" : content;
+
+        var form = FormsListBox.SelectedItem as FormViewModel;
+        if (!suppressChanged && form is not null)
+        {
+            form.Capabilities.Others.Clear();
+            foreach (var cap in caps)
+                form.Capabilities.Others.Add(cap);
+        }
     }
 }
